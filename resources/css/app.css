@@ -1,0 +1,114 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+
+/* Container */
+.auth-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #f4f7fa;
+    font-family: Arial, sans-serif;
+}
+
+/* Box */
+.auth-box {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Titre */
+.auth-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+/* Labels & Inputs */
+.auth-box label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #333;
+    font-weight: bold;
+}
+
+.auth-box input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    transition: 0.3s;
+}
+
+.auth-box input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 4px rgba(52,152,219,0.3);
+}
+
+/* Bouton */
+.auth-box button {
+    width: 100%;
+    padding: 12px;
+    background: #3498db;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.auth-box button:hover {
+    background: #2980b9;
+}
+
+/* Options */
+.auth-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.auth-options a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.auth-options a:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+.auth-footer {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.auth-footer a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Erreurs */
+.error-box {
+    background: #ffdddd;
+    border: 1px solid #ff8888;
+    color: #a94442;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
