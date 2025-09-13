@@ -4,94 +4,103 @@
 
 <style>
 body {
-    background-color: #121212;
-    font-family: Arial, sans-serif;
-    color: #e0e0e0;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
 }
 
 .auth-container {
-    max-width: 400px;
+    max-width: 420px;
     margin: 60px auto;
-    padding: 30px;
-    background-color: #1f1f2e;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    padding: 35px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+}
+
+.auth-container:hover {
+    transform: translateY(-4px);
 }
 
 .auth-container h1 {
     text-align: center;
-    color: #ff9800;
-    margin-bottom: 25px;
+    color: #2c3e50;
+    margin-bottom: 30px;
     font-size: 2rem;
+    font-weight: bold;
 }
 
-.auth-container input {
+.auth-container input,
+.auth-container select {
     width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border-radius: 6px;
-    border: 1px solid #333;
-    background-color: #2b2b3c;
-    color: #e0e0e0;
-    font-size: 16px;
-    transition: border 0.3s, background 0.3s;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fdfdfd;
+    font-size: 15px;
+    transition: all 0.3s ease;
 }
 
-.auth-container input:focus {
+.auth-container input:focus,
+.auth-container select:focus {
     border-color: #3a8dff;
-    background-color: #333;
+    background-color: #fff;
+    box-shadow: 0 0 6px rgba(58,141,255,0.3);
     outline: none;
 }
 
 .auth-container button {
     width: 100%;
-    padding: 12px;
-    background-color: #3a8dff;
+    padding: 14px;
+    background: linear-gradient(135deg, #3a8dff, #2865c2);
     color: #fff;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    transition: background 0.3s, transform 0.2s;
+    transition: all 0.3s ease;
 }
 
 .auth-container button:hover {
-    background-color: #2865c2;
+    background: linear-gradient(135deg, #2865c2, #1b4b91);
     transform: scale(1.02);
 }
 
 .auth-container .links {
     text-align: center;
-    margin-top: 15px;
+    margin-top: 20px;
     font-size: 14px;
 }
 
 .auth-container .links a {
     color: #3a8dff;
+    font-weight: 500;
     text-decoration: none;
     transition: color 0.3s;
 }
 
 .auth-container .links a:hover {
     color: #ff9800;
-    text-decoration: underline;
 }
 
-/* Optionnel : erreurs de validation */
+/* Erreurs validation */
 .auth-container .error {
     background-color: #ff4d4f;
     color: #fff;
-    padding: 8px 12px;
-    border-radius: 6px;
-    margin-bottom: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 15px;
     font-size: 14px;
-    text-align: center;
+    text-align: left;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 </style>
 
 <div class="auth-container">
-    <h1>Inscription</h1>
+    <h1>Créer un compte</h1>
     
     @if ($errors->any())
         <div class="error">
@@ -106,14 +115,28 @@ body {
     <form method="POST" action="{{ route('register') }}">
         @csrf
         <input type="text" name="name" placeholder="Nom complet" value="{{ old('name') }}" required>
-        <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
+        
+        <select name="country" id="country" required>
+            <option value=""> Sélectionnez votre pays </option>
+            @foreach(\App\Helpers\Countries::list() as $country)
+                <option value="{{ $country }}">{{ $country }}</option>
+            @endforeach
+        </select>
+        @error('country') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        
+        <input type="email" name="email" placeholder="Adresse e-mail" value="{{ old('email') }}" required>
+        
+        <input id="phone" type="text" name="phone" placeholder="Numéro de téléphone" value="{{ old('phone') }}" required>
+        @error('phone') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        
         <input type="password" name="password" placeholder="Mot de passe" required>
-        <input type="password" name="password_confirmation" placeholder="Confirmer le mot de passe" required>
+        <input type="password" name="password_confirmation" placeholder="Confirmez le mot de passe" required>
+        
         <button type="submit">S'inscrire</button>
     </form>
     
     <div class="links">
-        <a href="{{ route('login') }}">Déjà un compte ? Connectez-vous</a>
+        <a href="{{ route('login') }}">Déjà inscrit ? Se connecter</a>
     </div>
 </div>
 

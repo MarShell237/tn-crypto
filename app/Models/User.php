@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'country',
+        'balance',
     ];
 
     /**
@@ -51,4 +54,8 @@ class User extends Authenticatable
         return $this->hasMany(Win::class);
     }
 
+    public function produits()
+    {
+        return $this->hasMany(Produit::class);
+    }
 }

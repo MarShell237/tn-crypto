@@ -36,7 +36,7 @@
         </div>
         <div class="feature-card total">
             <h3>Compte total</h3>
-            <p>$0.00</p>
+            <p>{{ number_format(auth()->user()->balance ?? 0, 3, ',', ' ') }} FCFA</p>
         </div>
     </div>
 

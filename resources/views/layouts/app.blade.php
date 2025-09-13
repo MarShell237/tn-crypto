@@ -7,13 +7,19 @@
 
     <title>{{ config('app.name', 'InvestPro') }}</title>
 
+    <!-- Font Awesome CDN pour emojis/icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- <a href="https://www.flaticon.com/free-icons/litecoin" title="Litecoin icons">Litecoin icons created by riajulislam - Flaticon</a> -->
+
     <style>
-        /* Global */
-        body {
+        html, body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #fff;
+            padding: 0;
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+            overflow: hidden; /* empêche le scroll */
+            height: 100%;
         }
 
         a {
@@ -21,174 +27,125 @@
             color: inherit;
         }
 
-        ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Navbar */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 30px;
-            background-color: #1e1e1e;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-        }
-
-        .navbar .logo {
-            font-weight: bold;
-            font-size: 22px;
-            color: #3a8dff;
-        }
-
-        .navbar ul.nav-links {
-            display: flex;
-            gap: 25px;
-        }
-
-        .navbar ul.nav-links li {
-            padding: 8px 12px;
-            border-radius: 6px;
-            transition: background-color 0.2s;
-        }
-
-        .navbar ul.nav-links li:hover {
-            background-color: #333;
-        }
-
-        /* Hamburger menu */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 4px;
-        }
-
-        .hamburger div {
-            width: 25px;
-            height: 3px;
-            background-color: #fff;
-        }
-
-        /* Main content */
         main {
             padding: 20px 30px;
-            min-height: calc(100vh - 120px);
+            height: calc(100vh - 100px);
+            overflow-y: auto;
         }
 
-        /* Footer */
-        footer {
-            display: flex;
-            justify-content: space-around;
-            background-color: #1e1e1e;
-            padding: 20px 0;
-            color: #aaa;
-            flex-wrap: wrap;
-        }
-
-        footer a {
-            color: #3a8dff;
+        /* Solde total en haut à droite */
+        .balance-container {
+            position: fixed;
+            top: 10px;
+            right: 20%;
+            background: blue;
+            color: #fff;
             padding: 10px 20px;
-            margin: 5px 0;
-            border-radius: 6px;
-            transition: background-color 0.2s;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1001;
         }
 
-        footer a:hover {
-            background-color: #333;
+        /* Footer fixe avec emojis */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: #ffffff;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            z-index: 1000;
+            padding: 0 40px;
         }
 
-        /* Responsive */
+        .footer-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .footer-link i {
+            font-size: 24px; /* taille de l’emoji/icône */
+            margin-bottom: 5px;
+            color: #0e1577;
+        }
+
+        .footer-link a {
+            padding: 10px 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            background: #f0f0f0;
+        }
+
+        .footer-link a:hover {
+            background: linear-gradient(90deg, #0e1577, #3a8dff);
+            color: #fff;
+            transform: scale(1.05);
+        }
+
         @media (max-width: 768px) {
-            .navbar ul.nav-links {
-                position: fixed;
-                top: 60px;
-                left: -100%;
-                flex-direction: column;
-                background-color: #1e1e1e;
-                width: 100%;
-                height: calc(100% - 60px);
-                padding-top: 20px;
-                transition: left 0.3s ease-in-out;
-            }
-
-            .navbar ul.nav-links.active {
-                left: 0;
-            }
-
-            .hamburger {
-                display: flex;
-            }
-
-            .navbar ul.nav-links li {
-                text-align: center;
-                padding: 15px 0;
-            }
-
-            main {
-                padding: 15px 20px;
-            }
-
             footer {
                 flex-direction: row;
-                justify-content: space-around;
-                text-align: center;
-                flex-wrap: nowrap;
+                justify-content: space-between;
+                height: 70px;
+                padding: 0 1px;
+                background-color: rgba(0,0,0,0.0)
             }
 
-            footer a {
-                margin: 0;
-                padding: 10px 5px;
+            .footer-link i {
+                font-size: 20px;
+            }
+
+            .footer-link a {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+
+            .balance-container {
+                top: 10px;
+                right: 10px;
+                font-size: 14px;
+                padding: 8px 15px;
             }
         }
-
     </style>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const hamburger = document.querySelector(".hamburger");
-            const navLinks = document.querySelector(".nav-links");
-            hamburger.addEventListener("click", () => {
-                navLinks.classList.toggle("active");
-            });
-        });
-    </script>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">{{ config('app.name', 'InvestPro') }}</div>
-        <ul class="nav-links">
-            <li><a href="{{ url('/profile') }}">Profil</a></li>
-            <li>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" style="background:none;border:none;color:#3a8dff;cursor:pointer;">Déconnexion</button>
-                </form>
-            </li>
-        </ul>
-        <div class="hamburger">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </nav>
 
-    <!-- Page Content -->
-    <main>
-        @yield('content')
-    </main>
+<!-- Solde total en haut à droite -->
+<div class="balance-container" >
+    Solde total : <span id="solde">{{ number_format(auth()->user()->balance ?? 0, 3, ',', ' ') }} FCFA</span>
+</div>
+<main>
+    @yield('content')
+</main>
 
-    <!-- Footer -->
-    <footer>
-        <a href="{{ url('/') }}">Home</a>
+<footer>
+    <div class="footer-link">
+        <i class="fas fa-home"></i>
+        <a href="{{ url('/dashboard') }}">Home</a>
+    </div>
+    <div class="footer-link">
+        <i class="fas fa-gift"></i>
         <a href="{{ url('/lucky-loop') }}">Lucky Loop</a>
+    </div>
+    <div class="footer-link">
+        <i class="fas fa-users"></i>
         <a href="{{ url('/equipe') }}">Équipe</a>
-    </footer>
+    </div>
+    <div class="footer-link">
+        <i class="fas fa-user"></i>
+        <a href="{{ url('/moi') }}">Moi</a>
+    </div>
+</footer>
+
 </body>
 </html>

@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lucky_wins', function (Blueprint $table) {
+        Schema::create('produits', function (Blueprint $table) {
             $table->id();
-            $table->string('user_name');
-            $table->string('reward');
+            $table->string('nom');
+            $table->decimal('prix', 15, 2); // prix en FCFA
+            $table->integer('duree'); // durée en jours
+            $table->decimal('revenu', 15, 2); // revenu estimé
+            $table->string('emoji')->nullable(); // icône ou symbole
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lucky_wins');
+        Schema::dropIfExists('produits');
     }
 };

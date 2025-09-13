@@ -3,26 +3,27 @@
 @section('title', 'Lucky Loop')
 
 @section('content')
-
 <div class="lucky-loop-container">
 
     <!-- Header -->
     <div class="loop-header">
-        <h1> Lucky Loop </h1>
+        <h1>Lucky Loop</h1>
         <p>Tournez la roue et remportez vos récompenses !</p>
     </div>
 
     <!-- Roulette interactive -->
-    <div class="wheel-wrapper">
+    <div class="wheel-wrapper" style="position: relative; display: inline-block;">
+        <!-- Marqueur triangle inversé -->
+        <div class="wheel-pointer"></div>
         <canvas id="wheel" width="400" height="400"></canvas>
         <button id="spin-btn">TOURNER</button>
     </div>
 
     <!-- Historique des gains récents -->
     <div class="recent-wins">
-        <h3>Gains récents</h3>
+        <h3> Vos Gains</h3>
         <ul id="wins-list">
-             @foreach($recentWins as $win)
+            @foreach($recentWins as $win)
                 <li>{{ $win->user_name }} a gagné {{ $win->reward }}</li>
             @endforeach
         </ul>
@@ -50,72 +51,58 @@
 #spin-btn { margin-top: 20px; padding: 15px 25px; background-color: #3a8dff; color: #fff; font-size: 1.2rem; border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
 #spin-btn:hover { background-color: #0d6efd; transform: scale(1.05); }
 
+/* Triangle inversé */
+.wheel-pointer {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 20px solid #ff0000; /* pointe vers le bas */
+    z-index: 10;
+}
+
 .recent-wins { margin-top: 40px; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto; background: #f8f8f8; padding: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-.recent-wins ul { list-style: none; }
+.recent-wins ul { list-style: none; padding: 0; margin: 0; }
 .recent-wins li { padding: 8px 0; border-bottom: 1px solid #ddd; }
 .recent-wins li:last-child { border-bottom: none; }
 
-/* Modal styles */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 999;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: #fff;
-    padding: 30px;
-    border-radius: 15px;
-    text-align: center;
-    max-width: 400px;
-    width: 80%;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-}
-
+/* Modal */
+.modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; }
+.modal-content { background: #fff; padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; width: 80%; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
 .modal-content h2 { color: #ff9800; margin-bottom: 15px; }
 .modal-content p { font-size: 1.2rem; margin-bottom: 20px; }
-
-.modal-content button {
-    padding: 12px 25px;
-    background-color: #3a8dff;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
+.modal-content button { padding: 12px 25px; background-color: #3a8dff; color: #fff; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
 .modal-content button:hover { background-color: #0d6efd; }
+.close-btn { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; color: #ff4d4f; }
 
-.close-btn {
-    position: absolute;
-    top: 10px; right: 15px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #ff4d4f;
+@media(max-width:768px) {
+    .wheel-wrapper canvas{
+        width: 89%;
+    }
 }
 </style>
 
 <script>
-// Données de la roue
+// Données de la roue (désordre)
 const wheel = document.getElementById('wheel');
 const ctx = wheel.getContext('2d');
+
+// Segments mélangés
 const segments = [
-    {label: "50$", color:"#ff9800"},
-    {label: "Bonus", color:"#3a8dff"},
-    {label: "20 points", color:"#20c997"},
-    {label: "Produit", color:"#6a5acd"},
-    {label: "30$", color:"#ff4d4f"},
-    {label: "Jackpot", color:"#ffb100"},
-    {label: "10 points", color:"#0dcaf0"},
-    {label: "Coupon", color:"#6610f2"}
+    {label:"x2", color:"#28a745"},
+    {label:"Perdu", color:"#ff4d4f"},
+    {label:"x1", color:"#007bff"},
+    {label:"Code", color:"#ffc107"},
+    {label:"Perdu", color:"#ff4d4f"},
+    {label:"x2", color:"#28a745"},
+    {label:"Code", color:"#ffc107"},
+    {label:"x2", color:"linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)"}
 ];
+
 const anglePerSegment = 2 * Math.PI / segments.length;
 
 // Dessiner la roue
@@ -124,7 +111,20 @@ function drawWheel(){
         ctx.beginPath();
         ctx.moveTo(200,200);
         ctx.arc(200,200,200,i*anglePerSegment,(i+1)*anglePerSegment);
-        ctx.fillStyle = seg.color;
+
+        // Couleur arc-en-ciel
+        if(seg.color.includes("gradient")){
+            const grad = ctx.createLinearGradient(0,0,400,0);
+            grad.addColorStop(0,"red");
+            grad.addColorStop(0.2,"orange");
+            grad.addColorStop(0.4,"yellow");
+            grad.addColorStop(0.6,"green");
+            grad.addColorStop(0.8,"blue");
+            grad.addColorStop(1,"violet");
+            ctx.fillStyle = grad;
+        } else {
+            ctx.fillStyle = seg.color;
+        }
         ctx.fill();
 
         ctx.save();
@@ -132,13 +132,13 @@ function drawWheel(){
         ctx.rotate(i*anglePerSegment + anglePerSegment/2);
         ctx.fillStyle = "#fff";
         ctx.font = "bold 16px Arial";
-        ctx.fillText(seg.label, 100, 0);
+        ctx.fillText(seg.label, 120, 0);
         ctx.restore();
     });
 }
 drawWheel();
 
-// Spin animation avec modal résultat
+// Spin animation avec modal
 let isSpinning = false;
 document.getElementById('spin-btn').addEventListener('click', () => {
     if(isSpinning) return;
@@ -154,7 +154,6 @@ document.getElementById('spin-btn').addEventListener('click', () => {
     setTimeout(() => {
         showModal(segments[randomSegment].label);
         isSpinning = false;
-        // Optionnel: mettre à jour l'historique via fetch/AJAX
     }, 5000);
 });
 
@@ -173,12 +172,8 @@ function closeModal() {
     modal.style.display = 'none';
 }
 
-// Fermer le modal en cliquant en dehors
 window.addEventListener('click', function(event){
-    if(event.target === modal) {
-        closeModal();
-    }
+    if(event.target === modal) closeModal();
 });
 </script>
-
 @endsection
