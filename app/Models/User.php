@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -24,6 +23,8 @@ class User extends Authenticatable
         'phone',
         'country',
         'balance',
+        'referral_code', // nouveau
+        'referred_by',   // nouveau
     ];
 
     /**
@@ -49,6 +50,43 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Génération automatique du referral_code lors de la création
+     */
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if (empty($user->referral_code)) {
+                $user->referral_code = self::generateReferralCode();
+            }
+        });
+    }
+
+    /**
+     * Génère un code de parrainage unique
+     */
+    public static function generateReferralCode($length = 8)
+    {
+        do {
+            $code = strtoupper(Str::random($length));
+        } while (self::where('referral_code', $code)->exists());
+
+        return $code;
+    }
+
+    /**
+     * Relations pour le parrainage
+     */
+    public function referrer()
+    {
+        return $this->belongsTo(User::class, 'referred_by');
+    }
+
+    public function referrals()
+    {
+        return $this->hasMany(User::class, 'referred_by');
+    }
+
     public function wins()
     {
         return $this->hasMany(Win::class);
@@ -58,4 +96,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Produit::class);
     }
+
+    // public function produits()
+    // {
+    //     return $this->belongsToMany(Produit::class, 'user_produit')
+    //                 ->withPivot('duree', 'revenu', 'prix')
+    //                 ->withTimestamps();
+    // }
 }

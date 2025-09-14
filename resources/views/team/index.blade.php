@@ -13,7 +13,7 @@
         <div class="invite-card">
             <h3>Code d'invitation</h3>
             <div class="input-copy">
-                <input type="text" id="invite-code" value="123456M" readonly>
+                <input type="text" id="invite-code" value="{{ auth()->user()->referral_code }}" readonly>
                 <button onclick="copyText('invite-code')"><i class="fas fa-copy"></i> Copier</button>
             </div>
         </div>
@@ -21,12 +21,13 @@
         <div class="invite-card">
             <h3>Lien de parrainage</h3>
             <div class="input-copy">
-                <input type="text" id="invite-link" value="http://example.com/register?ref=123456M" readonly>
+                <input type="text" id="invite-link" value="{{ url('/register') . '?ref=' . auth()->user()->referral_code }}" readonly>
                 <button onclick="copyText('invite-link')"><i class="fas fa-copy"></i> Copier</button>
             </div>
         </div>
     </div>
 
+</div>
     <!-- Notification temporaire -->
     <div class="copy-alert" id="copy-alert">Copié avec succès !</div>
 

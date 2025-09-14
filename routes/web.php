@@ -53,7 +53,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/produits/mes-produits', [ProduitController::class, 'mesProduits'])->name('produits.mes');
     // Route::post('/acheter-crypto', [ProduitController::class, 'acheter'])->name('acheter.crypto');
 
-
+    
+    Route::get('/lucky-loop', [LuckyLoopController::class, 'index'])->name('lucky-loop.index');
+    Route::post('/lucky-loop/spin', [LuckyLoopController::class, 'spin'])->name('lucky-loop.spin');
 });
 Route::get('/moi', [App\Http\Controllers\MoiController::class, 'index'])->middleware('auth')->name('moi');
 Route::get('/equipe', [TeamController::class, 'index'])->name('team.index');
@@ -65,9 +67,8 @@ Route::get('/minages', [MinageController::class, 'index'])->name('minages.index'
 
 Route::get('moi/depots', [DepotController::class, 'index'])->name('depots.index')->middleware('auth');
 Route::get('moi/retraits', [RetraitController::class, 'index'])->name('retraits.index')->middleware('auth');
-Route::get('/partenaire', [PartenaireController::class, 'index'])->name('partenaire.index')->middleware('auth');
+Route::get('/partenaires', [PartenaireController::class, 'index'])->name('partenaire.index')->middleware('auth');
 require __DIR__.'/auth.php';
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
-

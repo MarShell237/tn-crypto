@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('country')->nullable();
             $table->decimal('balance', 15, 2)->default(0);
+            $table->string('referral_code', 8)->unique()->after('id');
             $table->rememberToken();
             $table->timestamps();
         });

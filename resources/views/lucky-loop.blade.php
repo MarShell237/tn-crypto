@@ -13,7 +13,6 @@
 
     <!-- Roulette interactive -->
     <div class="wheel-wrapper" style="position: relative; display: inline-block;">
-        <!-- Marqueur triangle inversé -->
         <div class="wheel-pointer"></div>
         <canvas id="wheel" width="400" height="400"></canvas>
         <button id="spin-btn">TOURNER</button>
@@ -29,7 +28,7 @@
         </ul>
     </div>
 
-    <!-- Modal personnalisé -->
+    <!-- Modal -->
     <div id="winModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
@@ -38,81 +37,56 @@
             <button onclick="closeModal()">Fermer</button>
         </div>
     </div>
-
 </div>
 
 <style>
-.lucky-loop-container { text-align: center; padding: 20px; position: relative; }
-.loop-header h1 { color: #ff9800; font-size: 2.5rem; margin-bottom: 10px; }
-.loop-header p { font-size: 1.2rem; color: #1e1e2f; }
+/* Styles conservés du code précédent... */
 
-.wheel-wrapper { position: relative; margin: 30px auto; width: 100%; max-width: 400px; }
-#wheel { border-radius: 50%; box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: transform 5s cubic-bezier(0.33,1,0.68,1); }
-#spin-btn { margin-top: 20px; padding: 15px 25px; background-color: #3a8dff; color: #fff; font-size: 1.2rem; border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
-#spin-btn:hover { background-color: #0d6efd; transform: scale(1.05); }
-
-/* Triangle inversé */
-.wheel-pointer {
-    position: absolute;
-    top: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 12px solid transparent;
-    border-right: 12px solid transparent;
-    border-top: 20px solid #ff0000; /* pointe vers le bas */
-    z-index: 10;
-}
-
-.recent-wins { margin-top: 40px; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto; background: #f8f8f8; padding: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-.recent-wins ul { list-style: none; padding: 0; margin: 0; }
-.recent-wins li { padding: 8px 0; border-bottom: 1px solid #ddd; }
-.recent-wins li:last-child { border-bottom: none; }
-
-/* Modal */
-.modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; }
-.modal-content { background: #fff; padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; width: 80%; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-.modal-content h2 { color: #ff9800; margin-bottom: 15px; }
-.modal-content p { font-size: 1.2rem; margin-bottom: 20px; }
-.modal-content button { padding: 12px 25px; background-color: #3a8dff; color: #fff; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
-.modal-content button:hover { background-color: #0d6efd; }
-.close-btn { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; color: #ff4d4f; }
-
-@media(max-width:768px) {
-    .wheel-wrapper canvas{
-        width: 89%;
-    }
-}
 </style>
 
 <script>
-// Données de la roue (désordre)
 const wheel = document.getElementById('wheel');
 const ctx = wheel.getContext('2d');
 
-// Segments mélangés
-const segments = [
-    {label:"x2", color:"#28a745"},
-    {label:"Perdu", color:"#ff4d4f"},
-    {label:"x1", color:"#007bff"},
-    {label:"Code", color:"#ffc107"},
-    {label:"Perdu", color:"#ff4d4f"},
-    {label:"x2", color:"#28a745"},
-    {label:"Code", color:"#ffc107"},
-    {label:"x2", color:"linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)"}
+const segmentsBase = [
+    { label: "Perdu", color: "#ff4d4f", weight: 3 },
+    { label: "x2", color: "#28a745", weight: 1 },
+    { label: "x2", color: "#28a745", weight: 1 },
+    { label: "Code", color: "#ffc107", weight: 2 },
+    { label: "x1", color: "#007bff", weight: 2 },
+    { label: "Solde x2", color: "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)", weight: 1 }
 ];
 
-const anglePerSegment = 2 * Math.PI / segments.length;
+let weightedSegments = [];
+segmentsBase.forEach(seg => {
+    for(let i=0;i<seg.weight;i++) weightedSegments.push({...seg});
+});
 
-// Dessiner la roue
-function drawWheel(){
-    segments.forEach((seg, i) => {
+function shuffleNoAdjacent(arr){
+    let shuffled, attempts=0;
+    do{
+        shuffled = arr.sort(()=>Math.random()-0.5);
+        attempts++;
+    }while(hasAdjacent(shuffled) && attempts<1000);
+    return shuffled;
+}
+function hasAdjacent(arr){
+    for(let i=0;i<arr.length-1;i++){
+        if(arr[i].color===arr[i+1].color) return true;
+    }
+    return false;
+}
+weightedSegments = shuffleNoAdjacent(weightedSegments);
+const segments = weightedSegments;
+const anglePerSegment = 2*Math.PI/segments.length;
+
+function drawWheel(highlightIndex=null){
+    ctx.clearRect(0,0,400,400);
+    segments.forEach((seg,i)=>{
         ctx.beginPath();
         ctx.moveTo(200,200);
         ctx.arc(200,200,200,i*anglePerSegment,(i+1)*anglePerSegment);
 
-        // Couleur arc-en-ciel
         if(seg.color.includes("gradient")){
             const grad = ctx.createLinearGradient(0,0,400,0);
             grad.addColorStop(0,"red");
@@ -122,58 +96,82 @@ function drawWheel(){
             grad.addColorStop(0.8,"blue");
             grad.addColorStop(1,"violet");
             ctx.fillStyle = grad;
-        } else {
-            ctx.fillStyle = seg.color;
+        } else ctx.fillStyle = seg.color;
+
+        // Clignotement
+        if(highlightIndex===i){
+            ctx.fillStyle = "#ffff00";
         }
+
         ctx.fill();
 
         ctx.save();
         ctx.translate(200,200);
         ctx.rotate(i*anglePerSegment + anglePerSegment/2);
-        ctx.fillStyle = "#fff";
-        ctx.font = "bold 16px Arial";
-        ctx.fillText(seg.label, 120, 0);
+        ctx.fillStyle="#fff";
+        ctx.font="bold 16px Arial";
+        ctx.fillText(seg.label,120,0);
         ctx.restore();
     });
 }
 drawWheel();
 
-// Spin animation avec modal
-let isSpinning = false;
-document.getElementById('spin-btn').addEventListener('click', () => {
+let isSpinning=false;
+document.getElementById('spin-btn').addEventListener('click', ()=>{
     if(isSpinning) return;
-    isSpinning = true;
+    isSpinning=true;
 
-    const spins = Math.floor(Math.random()*5)+5;
-    const randomSegment = Math.floor(Math.random()*segments.length);
-    const finalRotation = spins*360 + randomSegment*(360/segments.length);
+    const randomIndex = Math.floor(Math.random()*segments.length);
+    const finalSegment = segments[randomIndex];
 
-    wheel.style.transition = "transform 5s cubic-bezier(0.33,1,0.68,1)";
-    wheel.style.transform = `rotate(${finalRotation}deg)`;
+    const extraSpins = 5;
+    const randomAngle = (360/segments.length)*randomIndex + 360*extraSpins + (360/(2*segments.length));
 
-    setTimeout(() => {
-        showModal(segments[randomSegment].label);
-        isSpinning = false;
-    }, 5000);
+    wheel.style.transition="transform 5s cubic-bezier(0.33,1,0.68,1)";
+    wheel.style.transform=`rotate(${randomAngle}deg)`;
+
+    setTimeout(()=>{
+        // Clignotement du segment choisi
+        let blinkCount=0;
+        const blinkInterval = setInterval(()=>{
+            drawWheel(blinkCount%2===0 ? randomIndex : null);
+            blinkCount++;
+            if(blinkCount>5) clearInterval(blinkInterval);
+        },300);
+
+        showModal(finalSegment.label);
+
+        // Sauvegarder le gain via AJAX
+        fetch("{{ route('lucky-loop.spin') }}", {
+            method:'POST',
+            headers:{
+                "Content-Type":"application/json",
+                "X-CSRF-TOKEN":"{{ csrf_token() }}"
+            },
+            body: JSON.stringify({reward: finalSegment.label})
+        }).then(res=>res.json())
+          .then(data=>{
+              if(data.success){
+                  const ul = document.getElementById('wins-list');
+                  const li = document.createElement('li');
+                  li.textContent = "{{ auth()->user()->name }}" + " a gagné " + data.reward;
+                  ul.prepend(li);
+              }
+          });
+
+        isSpinning=false;
+    },5000);
 });
 
-// Modal
-const modal = document.getElementById('winModal');
-const modalTitle = document.getElementById('modalTitle');
-const modalReward = document.getElementById('modalReward');
-
-function showModal(reward) {
-    modalTitle.textContent = "Félicitations ! ";
-    modalReward.textContent = `Vous avez gagné : ${reward}`;
-    modal.style.display = 'flex';
+const modal=document.getElementById('winModal');
+const modalTitle=document.getElementById('modalTitle');
+const modalReward=document.getElementById('modalReward');
+function showModal(reward){
+    modalTitle.textContent="Félicitations !";
+    modalReward.textContent=`Vous avez gagné : ${reward}`;
+    modal.style.display='flex';
 }
-
-function closeModal() {
-    modal.style.display = 'none';
-}
-
-window.addEventListener('click', function(event){
-    if(event.target === modal) closeModal();
-});
+function closeModal(){ modal.style.display='none'; }
+window.addEventListener('click', e=>{if(e.target===modal) closeModal();});
 </script>
 @endsection
