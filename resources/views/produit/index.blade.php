@@ -30,20 +30,41 @@
                 $buttonColor = $colors[$produit->nom][2] ?? '#0e1577';
             @endphp
 
-            <div class="crypto-card" style="background: linear-gradient(135deg, {{ $gradient }}, {{ $gradient2 }});">
-                <div class="icon">{!! $produit->emoji !!}</div>
-                <h3>{{ $produit->nom }}</h3>
-                <p><i class="fas fa-dollar-sign"></i> Prix d’achat : 
-                    <span class="prix" data-usdt="{{ $produit->prix }}"></span>
-                </p>
-                <p><i class="fas fa-calendar-day"></i> Validité : <span>{{ $produit->duree }} jours</span></p>
-                <p><i class="fas fa-chart-line"></i> Revenu total : 
-                    <span class="revenu" data-usdt="{{ $produit->revenu }}"></span>
-                </p>
-                <button class="acheter" data-id="{{ $produit->id }}" style="background: {{ $buttonColor }};">
-                    <i class="fas fa-shopping-cart"></i> Acheter
-                </button>
-            </div>
+           <div class="crypto-card" style="background: linear-gradient(135deg, {{ $gradient }}, {{ $gradient2 }});">
+    <div class="icon">{!! $produit->emoji !!}</div>
+    <h3>{{ $produit->nom }}</h3>
+
+    <p>
+        <i class="fas fa-dollar-sign"></i> Prix d’achat : 
+        <span class="prix" data-usdt="{{ $produit->prix }}">
+            {{ number_format($produit->prix, 2, ',', ' ') }} FCFA
+        </span>
+    </p>
+
+    <p>
+        <i class="fas fa-calendar-day"></i> Validité : 
+        <span>{{ $produit->duree }} jours</span>
+    </p>
+
+    <p>
+        <i class="fas fa-chart-line"></i> Revenu journalier : 
+        <span class="revenu" data-usdt="{{ $produit->revenu_journalier }}">
+            {{ number_format($produit->revenu_journalier, 2, ',', ' ') }} FCFA
+        </span>
+    </p>
+
+    <p>
+        <i class="fas fa-chart-line"></i> Revenu total : 
+        <span class="revenu" data-usdt="{{ $produit->revenu }}">
+            {{ number_format($produit->revenu, 2, ',', ' ') }} FCFA
+        </span>
+    </p>
+
+    <button class="acheter" data-id="{{ $produit->id }}" style="background: {{ $buttonColor }};">
+        <i class="fas fa-shopping-cart"></i> Acheter
+    </button>
+</div>
+
         @endforeach
     </div>
 
@@ -68,6 +89,7 @@
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
+    transform: scale(0.9);
 }
 .crypto-card:hover { transform: translateY(-8px); box-shadow: 0 12px 30px rgba(0,0,0,0.15); }
 .crypto-card .icon { font-size: 3rem; margin-bottom: 15px; }

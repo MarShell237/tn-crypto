@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TeamController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\DepositController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RetraitController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\LuckyLoopController;
 use App\Http\Controllers\PartenaireController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -72,3 +74,13 @@ require __DIR__.'/auth.php';
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
+
+
+// Routes pour l'administration des utilisateurs
+Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () {
+    Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');
+    Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('admin.users.show');
+    Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+});
