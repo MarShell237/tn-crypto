@@ -119,7 +119,7 @@ body {
         <select name="country" id="country" required>
             <option value=""> Sélectionnez votre pays </option>
             @foreach(\App\Helpers\Countries::list() as $country)
-                <option value="{{ $country }}">{{ $country }}</option>
+                <option value="{{ $country }}" {{ old('country') == $country ? 'selected' : '' }}>{{ $country }}</option>
             @endforeach
         </select>
         @error('country') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -131,7 +131,11 @@ body {
         
         <input type="password" name="password" placeholder="Mot de passe" required>
         <input type="password" name="password_confirmation" placeholder="Confirmez le mot de passe" required>
-        
+
+        <!-- Champ de code de parrainage -->
+        <input type="text" name="referral_code" placeholder="Code de parrainage (optionnel)" value="{{ old('referral_code') }}">
+        @error('referral_code') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+
         <button type="submit">S'inscrire</button>
     </form>
     

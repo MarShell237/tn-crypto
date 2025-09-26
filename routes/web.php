@@ -14,8 +14,13 @@ use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RetraitController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LuckyLoopController;
 use App\Http\Controllers\PartenaireController;
+use App\Http\Controllers\WithdrawalController;
+use App\Http\Controllers\AdminDepositController;
+use App\Http\Controllers\AdminReferralController;
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
@@ -50,11 +55,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/mes-produits', function () {
         return view('produit.index'); // on créera ce fichier ensuite
     })->name('produits.mes-produits');
-    Route::post('/acheter-crypto', [CryptoController::class, 'acheter'])->name('acheter.crypto');
-    Route::get('/produit/index', [ProduitController::class, 'index'])->name('produits.mes-produits');
-    Route::get('/produits/mes-produits', [ProduitController::class, 'mesProduits'])->name('produits.mes');
-    // Route::post('/acheter-crypto', [ProduitController::class, 'acheter'])->name('acheter.crypto');
 
+
+    // Affichage de tous les produits disponibles à l’achat
+    Route::get('/produit/index', [ProduitController::class, 'index'])->name('produits.index');
+
+    // Acheter un produit
+    Route::post('/acheter-crypto', [CryptoController::class, 'acheter'])->name('acheter.crypto');
+
+    // Voir mes produits achetés
+    Route::get('/produits/mes-produits', [CryptoController::class, 'mesProduits'])->name('produits.mes');
+
+
+    // Route::post('/acheter-crypto', [ProduitController::class, 'acheter'])->name('acheter.crypto');
+     Route::get('/team', [DashboardController::class, 'index'])->name('team.index');
     
     Route::get('/lucky-loop', [LuckyLoopController::class, 'index'])->name('lucky-loop.index');
     Route::post('/lucky-loop/spin', [LuckyLoopController::class, 'spin'])->name('lucky-loop.spin');
@@ -69,18 +83,82 @@ Route::get('/minages', [MinageController::class, 'index'])->name('minages.index'
 
 Route::get('moi/depots', [DepotController::class, 'index'])->name('depots.index')->middleware('auth');
 Route::get('moi/retraits', [RetraitController::class, 'index'])->name('retraits.index')->middleware('auth');
-Route::get('/partenaires', [PartenaireController::class, 'index'])->name('partenaire.index')->middleware('auth');
+// Route::get('/partenaires', [PartenaireController::class, 'index'])->name('partenaire.index')->middleware('auth');
+
+Route::get('/partenaires', function () {
+    $partners = [
+        [
+            'name' => 'Binance',
+            'url' => 'https://www.binance.com',
+            'logo' => 'binance.png',
+            'description' => "Exchange crypto leader mondial."
+        ],
+        [
+            'name' => 'Deriv',
+            'url' => 'https://www.deriv.com',
+            'logo' => 'deriv.png',
+            'description' => "Plateforme de trading en ligne."
+        ],
+        [
+            'name' => 'XM',
+            'url' => 'https://www.xm.com',
+            'logo' => 'xm.png',
+            'description' => "Broker forex et CFD connu."
+        ],
+        [
+            'name' => 'Exness',
+            'url' => 'https://www.exness.com',
+            'logo' => 'exness.png',
+            'description' => "Broker forex global."
+        ],
+        [
+            'name' => 'OKX',
+            'url' => 'https://www.okx.com',
+            'logo' => 'okx.png',
+            'description' => "Exchange crypto et services dérivés."
+        ],
+        [
+            'name' => 'FBS',
+            'url' => 'https://www.fbs.com',
+            'logo' => 'fbs.png',
+            'description' => "Broker - optionnel 'autre partenaire'."
+        ],
+    ];
+
+    return view('partenaire.index', compact('partners'));
+})->name('partenaire.index')->middleware('auth');
 require __DIR__.'/auth.php';
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
+Route::middleware('auth')->group(function () {
+    Route::get('/depot/create', [DepositController::class, 'create'])->name('depot.create');
+    Route::post('/depot', [DepositController::class, 'store'])->name('depot.store');
 
-// Routes pour l'administration des utilisateurs
-Route::prefix('admin')->middleware(['auth', IsAdmin::class])->group(function () {
-    Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');
-    Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('admin.users.show');
-    Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
-    Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
-    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+    // pages d'instructions / récap
+    Route::get('/depot/{deposit}/instructions', [DepositController::class, 'instructions'])->name('depot.instructions');
+    Route::get('/depot/{deposit}/crypto', [DepositController::class, 'crypto'])->name('depot.crypto');
+});
+
+Route::prefix('admin')->middleware(['auth', IsAdmin::class])->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/referrals', [AdminReferralController::class, 'index'])->name('referrals.index');
+
+    // Dépôts
+    Route::get('/deposits', [AdminDepositController::class, 'index'])->name('deposits.index');
+    Route::post('/deposit/{deposit}/validate', [AdminDepositController::class, 'validateDeposit'])->name('deposit.validate');
+
+    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+    Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+});
+
+
+// web.php
+Route::middleware('auth')->group(function () {
+    Route::get('/withdrawal/create', [WithdrawalController::class, 'create'])->name('withdrawal.create');
+    Route::post('/withdrawal', [WithdrawalController::class, 'store'])->name('withdrawal.store');
 });

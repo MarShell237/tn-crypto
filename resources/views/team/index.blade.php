@@ -34,18 +34,35 @@
     <!-- Section niveaux -->
     <div class="levels-container">
         <div class="level-card">
-            <h3>Niveau A <span>20%</span></h3>
-            <p class="level-count">0</p>
+            <h3>Niveau A <span>{{ $niveauA }}</span></h3>
+            <p class="level-count">{{ $niveauA }} filleuls</p>
         </div>
         <div class="level-card">
-            <h3>Niveau B <span>40%</span></h3>
-            <p class="level-count">0</p>
+            <h3>Niveau B <span>{{ $niveauB }}</span></h3>
+            <p class="level-count">{{ $niveauB }} filleuls</p>
         </div>
         <div class="level-card">
-            <h3>Niveau C <span>2%</span></h3>
-            <p class="level-count">0</p>
+            <h3>Niveau C <span>{{ $niveauC }}</span></h3>
+            <p class="level-count">{{ $niveauC }} filleuls</p>
         </div>
     </div>
+
+    <!-- Section progression partenaire -->
+    <div class="partner-progress">
+        <h3>Progression vers Partenaire</h3>
+        <p>{{ $directReferralsCount }} / 50 filleuls directs</p>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: {{ $progress }}%">
+                <span class="progress-text">{{ $progress }}%</span>
+            </div>
+        </div>
+        @if($directReferralsCount >= 50)
+            <p class="status success">🎉 Félicitations ! Vous êtes devenu Partenaire.</p>
+        @else
+            <p class="status">Encore {{ 50 - $directReferralsCount }} filleuls pour devenir Partenaire.</p>
+        @endif
+    </div>
+
 </div>
 
 <style>
@@ -190,36 +207,97 @@
     font-weight: bold;
     color: #0e1577ff;
 }
+
+/* Progression partenaire */
+.partner-progress {
+    margin-top: 50px;
+    text-align: center;
+    background: #fff;
+    padding: 25px 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+
+.partner-progress h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #0e1577ff;
+}
+
+.progress-bar {
+    width: 100%;
+    max-width: 500px;
+    height: 30px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    margin: 15px auto;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0e1577ff, #3a8dff);
+    transition: width 0.5s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.progress-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.status {
+    font-size: 15px;
+    margin-top: 10px;
+    color: #555;
+}
+
+.status.success {
+    font-weight: bold;
+    color: green;
+}
+
+/* Responsive */
 .invite-card,
 .level-card {
     min-height: 150px; /* hauteur normale */
 }
-/* Responsive */
+
 @media(max-width: 768px) {
     .invite-container,
     .levels-container {
         flex-direction: column;
-        align-items: stretch; /* pour prendre toute la largeur */
+        align-items: stretch;
     }
 
-     .invite-card,
-    .level-card
-     {
+    .invite-card,
+    .level-card {
         max-height: 90px; /* 2x moins haut */
     }
-    .level-card{
+
+    .level-card {
         padding: 0;
         justify-content: center;
     }
+
     .input-copy {
-        flex-direction: column; /* inputs et boutons l’un au-dessus de l’autre */
+        flex-direction: column;
     }
 
     .input-copy button {
-        width: 100%; /* bouton pleine largeur pour mobile */
+        width: 100%;
     }
 }
-
 </style>
 
 <script>

@@ -2,64 +2,74 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Deposit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class DepositController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
-
-    // Afficher le formulaire de dépôt
+    // Affiche le formulaire
     public function create()
     {
-        $countries = [
-            'Cameroun' => 'XAF',
-            'Gabon' => 'XAF',
-            'Congo' => 'XAF',
-            'Tchad' => 'XAF',
-            'RCA' => 'XAF',
-            'Guinée équatoriale' => 'XAF',
-        ];
+        // Liste des méthodes de dépôt
+        $methods = Deposit::METHODS;
 
-        return view('deposits.create', compact('countries'));
+        return view('deposits.create', compact('methods'));
     }
 
-    // Enregistrer le dépôt
+    // Traite la requête de dépôt
     public function store(Request $request)
     {
         $request->validate([
-            'amount' => 'required|numeric|min:1000',
-            'country' => 'required|string',
+            'amount' => ['required', 'numeric', 'min:2000'],
+            'method' => ['required', 'string'],
+            'phone'  => ['nullable', 'required_if:method,MOMO,OM', 'string'],
+        ], [
+            'amount.min' => 'Le montant minimal est de 5000 FCFA.',
+            'phone.required_if' => 'Le numéro de téléphone est requis pour MOMO / OM.',
         ]);
 
-        $currencies = [
-            'Cameroun' => 'XAF',
-            'Gabon' => 'XAF',
-            'Congo' => 'XAF',
-            'Tchad' => 'XAF',
-            'RCA' => 'XAF',
-            'Guinée équatoriale' => 'XAF',
-        ];
+        $user = Auth::user();
 
-        $currency = $currencies[$request->country] ?? 'XAF';
-        $minAmount = 1000;
+        //  Créer un dépôt en attente de validation admin
+        $deposit = Deposit::create([
+            'user_id'   => $user->id,
+            'amount'    => $request->input('amount'),
+            'method'    => $request->input('method'),
+            'status'    => 'pending', // l’admin devra confirmer
+            'phone'     => $request->input('phone'),
+            'reference' => Str::upper(Str::random(10)),
+        ]);
 
-        if ($request->amount < $minAmount) {
-            return back()->with('error', "Le dépôt minimum est de $minAmount $currency");
+        //  Redirection selon la méthode choisie
+        if ($deposit->method === 'CRYPTO') {
+            return redirect()->route('depot.crypto', $deposit->id);
         }
 
-        Deposit::create([
-            'user_id' => Auth::id(),
-            'amount' => $request->amount,
-            'currency' => $currency,
-            'country' => $request->country,
-            'status' => 'completed', // dépôt automatique
-        ]);
+        return redirect()->route('depot.instructions', $deposit->id);
+    }
 
-        return redirect()->route('dashboard')->with('success', 'Dépôt effectué avec succès !');
+    // Vue d'instructions pour MOMO/OM
+    public function instructions(Deposit $deposit)
+    {
+        if (!in_array($deposit->method, ['MOMO', 'OM'])) {
+            abort(404);
+        }
+
+        return view('deposits.instructions', compact('deposit'));
+    }
+
+    // Vue pour crypto (adresse / QR)
+    public function crypto(Deposit $deposit)
+    {
+        if ($deposit->method !== 'CRYPTO') {
+            abort(404);
+        }
+
+        $walletAddress = config('services.crypto.wallet_address')
+            ?? '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa';
+
+        return view('deposits.crypto', compact('deposit', 'walletAddress'));
     }
 }

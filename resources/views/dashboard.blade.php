@@ -47,6 +47,16 @@
 
 <!-- Blocs de fonctionnalités -->
 <div class="features">
+    @auth
+    @if(auth()->user()->is_admin) 
+    <div class="feature-row">
+        <div class="feature-card">
+                <!-- ou une condition selon ton modèle -->
+                        <h1>Admin Dashboard</h1><a href="{{ route('admin.dashboard') }}" class="active">Dashboard</a>  
+            </div>    
+        </div>
+     @endif
+     @endauth
 
     <div class="feature-row">
         <div class="feature-card amount">
@@ -60,10 +70,12 @@
     </div>
 
     <div class="feature-row">
-        <div class="feature-card deposit">
-            <h3><i class="fas fa-arrow-down icon-card"></i> Dépôt</h3>
-            <a href="#"><button>Faire un dépôt</button></a>
-        </div>
+        <a href="{{ route('depot.create') }}"></a>
+            <div class="feature-card deposit">
+                <h3><i class="fas fa-arrow-down icon-card"></i> Dépôt</h3>
+                <a href="{{ route('depot.create') }}"><button>Faire un dépôt</button></a>
+            </div>
+        </a>
         <div class="feature-card withdraw">
             <h3><i class="fas fa-arrow-up icon-card"></i> Retrait</h3>
             <a href="#"><button>Faire un retrait</button></a>
@@ -83,7 +95,7 @@
                 <p>Venez miner et gagnez des récompenses</p>
             </div>
         </a>
-        <a class="feature-card" href="/partenaires">
+        <a class="feature-card" href="{{ route('partenaire.index') }}">
             <div class="feature-card partenaires">
                 <h3><i class="fas fa-handshake icon-card"></i> Partenaires</h3>
                 <p>Devenez partenaires et gagnez plus gros</p>

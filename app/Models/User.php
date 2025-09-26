@@ -59,7 +59,9 @@ class User extends Authenticatable
             if (empty($user->referral_code)) {
                 $user->referral_code = self::generateReferralCode();
             }
-        });
+            // Ajouter un solde initial
+            $user->balance = 1000; // 1000 FCFA
+            });
     }
 
     /**
@@ -94,8 +96,11 @@ class User extends Authenticatable
 
     public function produits()
     {
-        return $this->hasMany(Produit::class);
+        return $this->belongsToMany(Produit::class, 'user_produit')
+                    ->withPivot(['duree', 'revenu', 'prix'])
+                    ->withTimestamps();
     }
+
 
     // public function produits()
     // {
@@ -103,4 +108,5 @@ class User extends Authenticatable
     //                 ->withPivot('duree', 'revenu', 'prix')
     //                 ->withTimestamps();
     // }
-}
+
+    }

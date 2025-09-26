@@ -142,12 +142,13 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const taux = 600;
+    const taux = 600; // Taux de conversion USDT -> FCFA
 
     function formatNombre(n) {
         return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
 
+    // Conversion automatique des prix et revenus
     document.querySelectorAll(".prix, .revenu").forEach(el => {
         const usdt = parseFloat(el.getAttribute("data-usdt")) || 0;
         const fcfa = usdt * taux;
@@ -181,6 +182,18 @@ document.addEventListener("DOMContentLoaded", function() {
                 if(data.success) {
                     modalMsg.innerHTML = '<i class="fas fa-check-circle" style="color:green;"></i> Paiement effectué !';
                     modal.style.display = "flex";
+
+                    // Cloner le produit et l'ajouter dans "mes-produits"
+                    const clone = card.cloneNode(true);
+                    // Supprimer le bouton acheter pour éviter double achat
+                    const btnAcheter = clone.querySelector("button.acheter");
+                    if(btnAcheter) btnAcheter.remove();
+
+                    const mesProduitsGrid = document.querySelector('#mes-produits-grid');
+                    if(mesProduitsGrid) {
+                        mesProduitsGrid.prepend(clone);
+                    }
+
                 } else {
                     modalMsg.innerHTML = '<i class="fas fa-times-circle" style="color:red;"></i> Solde insuffisant !';
                     modal.style.display = "flex";
@@ -190,4 +203,5 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
+
 @endsection

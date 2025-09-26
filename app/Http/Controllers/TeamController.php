@@ -3,12 +3,32 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TeamController extends Controller
 {
     public function index()
     {
-        // Exemple de membres de l'équipe
+        $user = Auth::user();
+
+        // 🔹 Calcul des filleuls directs (Niveau A)
+        $niveauA = $user->referrals()->count();
+
+        // 🔹 Niveau B = filleuls des filleuls (2ème niveau)
+        $niveauB = $user->referrals()->withCount('referrals')->get()->sum('referrals_count');
+
+        // 🔹 Niveau C = filleuls des filleuls des filleuls (3ème niveau)
+        $niveauC = $user->referrals()->with('referrals.referrals')->get()->sum(function ($filleul) {
+            return $filleul->referrals->sum(function ($sousFilleul) {
+                return $sousFilleul->referrals->count();
+            });
+        });
+
+        // 🔹 Progression vers partenaire
+        $directReferralsCount = $niveauA; // filleuls directs = niveau A
+        $progress = min(100, ($directReferralsCount / 50) * 100);
+
+        // Exemple de membres de l'équipe (statique)
         $members = [
             [
                 'name' => 'Alice Dupont',
@@ -32,6 +52,13 @@ class TeamController extends Controller
             ],
         ];
 
-        return view('team.index', compact('members'));
+        return view('team.index', compact(
+            'members',
+            'niveauA',
+            'niveauB',
+            'niveauC',
+            'directReferralsCount',
+            'progress'
+        ));
     }
 }

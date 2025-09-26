@@ -37,4 +37,12 @@ class Produit extends Model
 
         return round($revenu / $duree, 2);
     }
+
+    public function acheteurs()
+    {
+        return $this->belongsToMany(User::class, 'user_produit')
+            ->withPivot(['duree', 'revenu', 'prix'])
+            ->withTimestamps();
+    }
+
 }

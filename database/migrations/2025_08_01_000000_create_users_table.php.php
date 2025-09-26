@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->decimal('balance', 15, 2)->default(0);
             $table->string('referral_code', 8)->unique();
+            $table->foreignId('referred_by')->nullable()->constrained('users')->onDelete('set null');
             $table->boolean('is_admin')->default(false);
             $table->rememberToken();
             $table->timestamps();
@@ -47,8 +48,14 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['referred_by']);
+            $table->dropColumn('referred_by');
+        });
+
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }
+
 };

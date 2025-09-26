@@ -1,170 +1,147 @@
+{{-- resources/views/partenaire/index.blade.php --}}
 @extends('layouts.app')
 
-@section('title', 'Devenir Partenaire')
+@section('title', 'Partenaires')
 
 @section('content')
-<div class="partner-container">
-    <h1>Devenir Partenaire</h1>
-    <p class="partner-intro">Invitez vos amis et gagnez des récompenses !</p>
+<div class="partners-page">
+    <div class="header">
+        <h1>Nos partenaires</h1>
+        <p>Nous travaillons avec des structures reconnues pour vous offrir les meilleurs services.</p>
+    </div>
 
-    <div class="partner-tiers">
+    <div class="partners-grid">
+        @foreach($partners as $p)
+            @php
+                $logoPath = 'image/partners/' . $p['logo'];
+                $logoFullPath = public_path($logoPath);
+                $hasLogo = file_exists($logoFullPath);
+            @endphp
 
-        <!-- Palier 1 -->
-        <div class="partner-tier">
-            <h2>Invitez 5 personnes à investir</h2>
-            <p class="reward">Récompense: 1500F</p>
-            <div class="progress-bar">
-                <div class="progress" style="width: 40%"></div>
-            </div>
-            <p class="percentage">40% atteint</p>
-            <button class="claim-btn" disabled>Réclamer</button>
-        </div>
+            <a class="partner-card" href="{{ $p['url'] }}" target="_blank" rel="noopener noreferrer">
+                <div class="partner-logo">
+                    @if($hasLogo)
+                        <img src="{{ asset($logoPath) }}" alt="{{ $p['name'] }} logo" loading="lazy">
+                    @else
+                        {{-- fallback : première lettre --}}
+                        <div class="partner-placeholder">{{ strtoupper(substr($p['name'], 0, 1)) }}</div>
+                    @endif
+                </div>
 
-        <!-- Palier 2 -->
-        <div class="partner-tier">
-            <h2>Invitez 15 personnes à investir</h2>
-            <p class="reward">Récompense: 4500F</p>
-            <div class="progress-bar">
-                <div class="progress" style="width: 20%"></div>
-            </div>
-            <p class="percentage">20% atteint</p>
-            <button class="claim-btn" disabled>Réclamer</button>
-        </div>
+                <div class="partner-meta">
+                    <h3>{{ $p['name'] }}</h3>
+                    <p class="partner-desc">{{ $p['description'] ?? '' }}</p>
+                </div>
+            </a>
+        @endforeach
+    </div>
 
-        <!-- Palier 3 -->
-        <div class="partner-tier">
-            <h2>Invitez 30 personnes à investir</h2>
-            <p class="reward">Récompense: 9000F</p>
-            <div class="progress-bar">
-                <div class="progress" style="width: 0%"></div>
-            </div>
-            <p class="percentage">0% atteint</p>
-            <button class="claim-btn" disabled>Réclamer</button>
-        </div>
-
-        <!-- Palier 4 -->
-        <div class="partner-tier">
-            <h2>Invitez 60 personnes à investir</h2>
-            <p class="reward">Récompense: 18000F</p>
-            <div class="progress-bar">
-                <div class="progress" style="width: 0%"></div>
-            </div>
-            <p class="percentage">0% atteint</p>
-            <button class="claim-btn" disabled>Réclamer</button>
-        </div>
-
+    <div class="partners-note">
+        <p>Si vous souhaitez devenir partenaire, contactez-nous.</p>
     </div>
 </div>
 
 <style>
-.partner-container {
-    max-width: 900px;
-    margin: 50px auto;
+/* Container */
+.partners-page {
+    max-width: 1100px;
+    margin: 40px auto;
     padding: 0 20px;
     font-family: 'Poppins', sans-serif;
     text-align: center;
 }
 
-.partner-container h1 {
+/* Header */
+.partners-page .header h1 {
     font-size: 32px;
     color: #0e1577ff;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
-
-.partner-intro {
-    font-size: 16px;
+.partners-page .header p {
     color: #555;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
 }
 
-.partner-tiers {
-    display: flex;
-    flex-wrap: wrap;
+/* Grid */
+.partners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px;
-    justify-content: center;
+    align-items: stretch;
 }
 
-.partner-tier {
+/* Card */
+.partner-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
     background: #fff;
-    flex: 1 1 200px;
-    max-width: 220px;
-    padding: 25px 20px;
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    text-align: center;
-    transition: transform 0.3s, box-shadow 0.3s;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    color: inherit;
+    min-height: 190px;
 }
 
-.partner-tier:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+.partner-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.12);
 }
 
-.partner-tier h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #0e1577ff;
-}
-
-.reward {
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: #ff9800;
-}
-
-.progress-bar {
+.partner-logo {
     width: 100%;
-    height: 12px;
-    background: #eee;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    overflow: hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height: 100px;
+    margin-bottom: 12px;
 }
 
-.progress {
-    height: 100%;
-    background: linear-gradient(90deg, #0e1577, #3a8dff);
-    border-radius: 10px 0 0 10px;
+.partner-logo img {
+    max-height: 96px;
+    max-width: 160px;
+    object-fit: contain;
 }
 
-.percentage {
-    margin-bottom: 15px;
-    font-weight: 500;
-    color: #555;
+/* placeholder */
+.partner-placeholder {
+    background: linear-gradient(135deg,#f0f4ff,#dfeeff);
+    width:84px;
+    height:84px;
+    border-radius: 999px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+    color:#0e1577ff;
+    font-weight:700;
 }
 
-.claim-btn {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    background: #28a745;
-    color: #fff;
-    width: 100%;
-    transition: all 0.3s;
+/* meta */
+.partner-meta h3 {
+    margin:6px 0 6px;
+    color:#0e1577ff;
+    font-size:18px;
+}
+.partner-desc {
+    color:#666;
+    font-size:13px;
+    line-height:1.25;
 }
 
-.claim-btn:disabled {
-    background: #ccc;
-    cursor: not-allowed;
+/* note */
+.partners-note {
+    margin-top: 24px;
+    color:#666;
+    font-size:14px;
 }
 
-.claim-btn:not(:disabled):hover {
-    transform: scale(1.05);
-}
-
-/* Responsive */
-@media(max-width: 768px) {
-    .partner-tiers {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .partner-tier {
-        max-width: 100%;
-    }
+/* responsive */
+@media (max-width: 640px) {
+    .partner-card { padding: 14px; min-height: 150px; }
+    .partner-logo { height: 78px; margin-bottom: 8px; }
 }
 </style>
-
 @endsection
