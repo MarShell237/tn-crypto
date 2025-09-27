@@ -8,8 +8,9 @@
             <li><a href="{{ route('admin.dashboard') }}" class="active">Dashboard</a></li>
             <li><a href="{{ route('admin.users.index') }}">Utilisateurs</a></li>
             <li><a href="{{ route('admin.deposits.index') }}">Dépôts</a></li>
-            <li><a href="#">Retraits</a></li>
+            <li><a href="{{ route('admin.withdrawals.index') }}">Retraits</a></li>
             <li><a href="{{ route('admin.referrals.index') }}">Parrainages</a></li>
+            <li><a href="{{ route('bonus.index') }}">Bonus</a></li>
         </ul>
     </nav>
 

@@ -101,6 +101,16 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
+    public function withdrawals()
+    {
+        return $this->hasMany(Withdrawal::class);
+    }
+
+    public function bonuses()
+    {
+        return $this->belongsToMany(Bonus::class, 'bonus_user')->withTimestamps();
+    }
+
 
     // public function produits()
     // {

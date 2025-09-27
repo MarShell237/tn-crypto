@@ -9,19 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('withdrawals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->decimal('amount', 15, 2);
-            $table->enum('method', ['MOMO', 'OM', 'CRYPTO']);
-            $table->string('status')->default('pending'); // pending, processing, completed, failed
-            $table->string('phone')->nullable(); // pour MOMO / OM
-            $table->text('meta')->nullable(); // JSON pour stocker infos APIs
+            $table->decimal('amount', 12, 2);
+            $table->string('method'); // ex: MOMO, OM, CRYPTO
+            $table->string('phone')->nullable(); // pour MOMO/OM
+            $table->string('reference')->unique();
+            $table->enum('status', ['pending', 'validated', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

@@ -76,10 +76,13 @@
                 <a href="{{ route('depot.create') }}"><button>Faire un dépôt</button></a>
             </div>
         </a>
+
+        <a href="{{ route('withdrawals.create') }}"></a>
         <div class="feature-card withdraw">
             <h3><i class="fas fa-arrow-up icon-card"></i> Retrait</h3>
-            <a href="#"><button>Faire un retrait</button></a>
+            <a href="{{ route('withdrawals.create') }}"><button>Faire un retrait</button></a>
         </div>
+        </a>
     </div>
 
     <div class="feature-row">
@@ -101,7 +104,7 @@
                 <p>Devenez partenaires et gagnez plus gros</p>
             </div>
         </a>
-        <a class="feature-card" href="/bonus">
+        <a class="feature-card" href="{{ route('bonus.use') }}">
             <div class="feature-card bonus">
                 <h3><i class="fas fa-gift icon-card"></i> Bonus</h3>
                 <p>Voir les bonus</p>

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Bonus;
+use App\Models\Withdrawal;
 use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -16,11 +18,13 @@ use App\Http\Controllers\RetraitController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LuckyLoopController;
+use App\Http\Controllers\UserBonusController;
 use App\Http\Controllers\PartenaireController;
 use App\Http\Controllers\WithdrawalController;
 use App\Http\Controllers\AdminDepositController;
 use App\Http\Controllers\AdminReferralController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminWithdrawalController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
@@ -161,4 +165,56 @@ Route::prefix('admin')->middleware(['auth', IsAdmin::class])->name('admin.')->gr
 Route::middleware('auth')->group(function () {
     Route::get('/withdrawal/create', [WithdrawalController::class, 'create'])->name('withdrawal.create');
     Route::post('/withdrawal', [WithdrawalController::class, 'store'])->name('withdrawal.store');
+});
+
+// Utilisateur
+Route::middleware('auth')->group(function () {
+    Route::get('/withdrawals/create', [WithdrawalController::class, 'create'])->name('withdrawals.create');
+    Route::post('/withdrawals/store', [WithdrawalController::class, 'store'])->name('withdrawals.store');
+    Route::get('/withdrawals/history', [WithdrawalController::class, 'history'])->name('withdrawals.history');
+});
+
+
+// Admin - Withdrawals
+Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
+    Route::get('/withdrawals', function () {
+        if (!auth()->user() || auth()->user()->is_admin !== 1) abort(403);
+        return app(AdminWithdrawalController::class)->index(request());
+    })->name('withdrawals.index');
+
+    Route::post('/withdrawals/{withdrawal}/validate', function ($withdrawal) {
+        if (!auth()->user() || auth()->user()->is_admin !== 1) abort(403);
+
+        $withdrawal = Withdrawal::findOrFail($withdrawal); // 🔑 récupérer le modèle
+        return app(AdminWithdrawalController::class)->validateWithdrawal($withdrawal);
+    })->name('withdrawals.validate');
+
+    Route::post('/withdrawals/{withdrawal}/complete', function ($withdrawal) {
+        if (!auth()->user() || auth()->user()->is_admin !== 1) abort(403);
+
+        $withdrawal = Withdrawal::findOrFail($withdrawal); // 🔑 récupérer le modèle
+        return app(AdminWithdrawalController::class)->completeWithdrawal($withdrawal);
+    })->name('withdrawals.complete');
+
+    Route::post('/withdrawals/{withdrawal}/reject', function ($withdrawal) {
+        if (!auth()->user() || auth()->user()->is_admin !== 1) abort(403);
+
+        $withdrawal = Withdrawal::findOrFail($withdrawal); // 🔑 récupérer le modèle
+        return app(AdminWithdrawalController::class)->rejectWithdrawal($withdrawal);
+    })->name('withdrawals.reject');
+});
+
+
+
+
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('bonuses', [BonusController::class, 'index'])->name('bonus.index');
+    Route::post('bonuses/generate', [BonusController::class, 'generate'])->name('bonus.generate');
+    Route::get('bonuses/{id}/edit', [BonusController::class, 'edit'])->name('bonus.edit');
+    Route::post('bonuses/{id}/update', [BonusController::class, 'update'])->name('bonus.update');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/bonus/use', [UserBonusController::class, 'showForm'])->name('bonus.use');
+    Route::post('/bonus/use', [UserBonusController::class, 'apply'])->name('bonus.apply');
 });

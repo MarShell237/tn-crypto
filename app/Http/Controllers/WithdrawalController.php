@@ -1,46 +1,50 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Withdrawal;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class WithdrawalController extends Controller
 {
     public function create()
     {
-        $methods = ['MOMO', 'OM', 'CRYPTO'];
-        return view('withdrawal.create', compact('methods'));
+        $methods = ['MOMO','OM','CRYPTO'];
+        return view('withdrawals.create', compact('methods'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'amount' => 'required|numeric|min:2000',
-            'method' => 'required|in:MOMO,OM,CRYPTO',
-            'phone' => 'nullable|string',
+            'amount' => ['required','numeric','min:1000'],
+            'method' => ['required','string'],
+            'phone'  => ['nullable','required_if:method,MOMO,OM','string'],
         ]);
 
         $user = Auth::user();
 
-        // Vérifier le solde
         if ($request->amount > $user->balance) {
-            return back()->withErrors(['amount' => 'Solde insuffisant pour ce retrait']);
+            return back()->with('error', 'Solde insuffisant pour ce retrait.');
         }
 
-        // Créer le retrait
         Withdrawal::create([
-            'user_id' => $user->id,
-            'amount' => $request->amount,
-            'method' => $request->method,
-            'phone' => $request->phone,
-            'status' => 'pending',
+            'user_id'   => $user->id,
+            'amount'    => $request->amount,
+            'method' => $request->input('method'),
+            'phone'     => $request->phone,
+            'reference' => 'WD-' . strtoupper(Str::random(8)),
+            'status'    => 'pending',
         ]);
 
-        // Débiter le solde immédiatement (optionnel selon la logique)
-        $user->decrement('balance', $request->amount);
+        return redirect()->route('withdrawals.history')
+                         ->with('success', 'Votre demande de retrait a été enregistrée et est en attente de validation.');
+    }
 
-        return redirect()->route('withdrawal.create')->with('success', 'Retrait initié avec succès !');
+    public function history()
+    {
+        $withdrawals = Auth::user()->withdrawals()->latest()->get();
+        return view('withdrawals.history', compact('withdrawals'));
     }
 }
