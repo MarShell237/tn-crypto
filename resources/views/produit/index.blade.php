@@ -9,7 +9,6 @@
     <div class="crypto-grid">
         @foreach($produits as $produit)
             @php
-                // Définir dynamiquement le gradient et la couleur du bouton selon la crypto
                 $colors = [
                     'Bitcoin' => ['#fff7e6', '#ffe082', '#f7931a'],
                     'Ethereum' => ['#eef2ff', '#c7d2fe', '#3c3cce'],
@@ -28,54 +27,58 @@
                 $gradient = $colors[$produit->nom][0] ?? '#ffffff';
                 $gradient2 = $colors[$produit->nom][1] ?? '#f0f0f0';
                 $buttonColor = $colors[$produit->nom][2] ?? '#0e1577';
+
+                // Compter les utilisateurs ayant acheté ce produit
+                $userCount = $produit->users()->count(); // Relation users() définie dans Produit.php
             @endphp
 
-           <div class="crypto-card" style="background: linear-gradient(135deg, {{ $gradient }}, {{ $gradient2 }});">
-    <div class="icon">{!! $produit->emoji !!}</div>
-    <h3>{{ $produit->nom }}</h3>
+            <div class="crypto-card" style="background: linear-gradient(135deg, {{ $gradient }}, {{ $gradient2 }});">
+                <div class="icon">{!! $produit->emoji !!}</div>
+                <h3>{{ $produit->nom }}</h3>
 
-    <p>
-        <i class="fas fa-dollar-sign"></i> Prix d’achat : 
-        <span class="prix" data-usdt="{{ $produit->prix }}">
-            {{ number_format($produit->prix, 2, ',', ' ') }} FCFA
-        </span>
-    </p>
+                <p>
+                    <i class="fas fa-dollar-sign"></i> Prix d’achat : 
+                    <span class="prix" data-usdt="{{ $produit->prix }}">
+                        {{ number_format($produit->prix, 2, ',', ' ') }} FCFA
+                    </span>
+                </p>
 
-    <p>
-        <i class="fas fa-calendar-day"></i> Validité : 
-        <span>{{ $produit->duree }} jours</span>
-    </p>
+                <p>
+                    <i class="fas fa-calendar-day"></i> Validité : 
+                    <span>{{ $produit->duree }} jours</span>
+                </p>
 
-    <p>
-        <i class="fas fa-chart-line"></i> Revenu journalier : 
-        <span class="revenu" data-usdt="{{ $produit->revenu_journalier }}">
-            {{ number_format($produit->revenu_journalier, 2, ',', ' ') }} FCFA
-        </span>
-    </p>
+                <p>
+                    <i class="fas fa-chart-line"></i> Revenu journalier : 
+                    <span class="revenu" data-usdt="{{ $produit->revenu_journalier }}">
+                        {{ number_format($produit->revenu_journalier, 2, ',', ' ') }} FCFA
+                    </span>
+                </p>
 
-    <p>
-        <i class="fas fa-chart-line"></i> Revenu total : 
-        <span class="revenu" data-usdt="{{ $produit->revenu }}">
-            {{ number_format($produit->revenu, 2, ',', ' ') }} FCFA
-        </span>
-    </p>
+                <p>
+                    <i class="fas fa-chart-line"></i> Revenu total : 
+                    <span class="revenu" data-usdt="{{ $produit->revenu }}">
+                        {{ number_format($produit->revenu, 2, ',', ' ') }} FCFA
+                    </span>
+                </p>
 
-    <button class="acheter" data-id="{{ $produit->id }}" style="background: {{ $buttonColor }};">
-        <i class="fas fa-shopping-cart"></i> Acheter
-    </button>
-</div>
+                <p>
+                    <i class="fas fa-users"></i> Nombre d'utilisateurs : 
+                    <span>{{ $userCount }}</span>
+                </p>
 
+                <button class="acheter" data-id="{{ $produit->id }}" style="background: {{ $buttonColor }};">
+                    <i class="fas fa-shopping-cart"></i> Acheter
+                </button>
+            </div>
         @endforeach
     </div>
-
-    <!-- Modal -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <p id="modal-message"></p>
-            <button id="modal-close">Fermer</button>
-        </div>
-    </div>
 </div>
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <p id="modal-message"></p>
+        <button id="modal-close">Fermer</button>
+    </div>
 
 <style>
 .produit-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; text-align: center; }
@@ -140,9 +143,10 @@
 #modal-close:hover { background: #161f8f; }
 </style>
 
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const taux = 600; // Taux de conversion USDT -> FCFA
+    const taux = 600;
 
     function formatNombre(n) {
         return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
@@ -163,11 +167,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.querySelectorAll(".acheter").forEach(button => {
         button.addEventListener("click", function() {
-            const card = this.closest(".crypto-card");
-            const nom = card.querySelector("h3").innerText;
-            const prixFcfa = parseFloat(card.querySelector(".prix").getAttribute("data-fcfa"));
-            const duree = card.querySelector("p span").innerText;
-            const revenu = parseFloat(card.querySelector(".revenu").getAttribute("data-fcfa"));
+            const produitId = this.dataset.id;
 
             fetch("{{ route('acheter.crypto') }}", {
                 method: "POST",
@@ -175,25 +175,13 @@ document.addEventListener("DOMContentLoaded", function() {
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": "{{ csrf_token() }}"
                 },
-                body: JSON.stringify({ prix_fcfa: prixFcfa, nom: nom, duree: duree, revenu: revenu })
+                body: JSON.stringify({ produit_id: produitId })
             })
             .then(res => res.json())
             .then(data => {
                 if(data.success) {
                     modalMsg.innerHTML = '<i class="fas fa-check-circle" style="color:green;"></i> Paiement effectué !';
                     modal.style.display = "flex";
-
-                    // Cloner le produit et l'ajouter dans "mes-produits"
-                    const clone = card.cloneNode(true);
-                    // Supprimer le bouton acheter pour éviter double achat
-                    const btnAcheter = clone.querySelector("button.acheter");
-                    if(btnAcheter) btnAcheter.remove();
-
-                    const mesProduitsGrid = document.querySelector('#mes-produits-grid');
-                    if(mesProduitsGrid) {
-                        mesProduitsGrid.prepend(clone);
-                    }
-
                 } else {
                     modalMsg.innerHTML = '<i class="fas fa-times-circle" style="color:red;"></i> Solde insuffisant !';
                     modal.style.display = "flex";
@@ -203,5 +191,4 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
-
 @endsection

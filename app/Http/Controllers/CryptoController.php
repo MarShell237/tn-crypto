@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserProduct;
+use App\Models\Produit;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class CryptoController extends Controller
@@ -11,27 +12,28 @@ class CryptoController extends Controller
     public function acheter(Request $request)
     {
         $user = Auth::user();
-        $prixFcfa = $request->input('prix_fcfa');
+        $produitId = $request->input('produit_id'); // ID du produit
+        $produit = Produit::findOrFail($produitId);
+
+        $prixFcfa = $produit->prix;
 
         if($user->balance >= $prixFcfa) {
-              // Enregistrer dans user_produit
-            // UserProduit::create([
-            //     'user_id'    => $user->id,
-            //     'produit_id' => $produit->id,
-            //     'duree'      => $produit->duree,
-            //     'revenu'     => $produit->revenu,
-            //     'prix'       => $request->prix_fcfa,
-            // ]);
-            // Déduire le montant
+            // Débiter le solde
             $user->balance -= $prixFcfa;
             $user->save();
 
-            return response()->json([
-                'success' => true,
-                'nouveau_solde' => $user->balance
+            // Ajouter le produit à la table pivot user_produit
+            $user->produits()->attach($produit->id, [
+                'duree'  => $produit->duree,
+                'revenu' => $produit->revenu,
+                'prix'   => $produit->prix,
             ]);
 
-            
+            return response()->json([
+                'success' => true,
+                'nouveau_solde' => $user->balance,
+                'message' => 'Produit acheté avec succès !'
+            ]);
         }
 
         return response()->json([
@@ -40,14 +42,13 @@ class CryptoController extends Controller
         ]);
     }
 
-        /**
+    /**
      * Afficher les produits achetés par l’utilisateur
      */
     public function mesProduits()
     {
         $user = Auth::user();
 
-        // Récupère tous les produits liés à l’utilisateur
         $produits = $user->produits()->withPivot('duree', 'revenu', 'prix')->get();
 
         return view('produits.mes-produits', compact('produits'));

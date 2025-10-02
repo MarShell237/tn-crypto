@@ -16,10 +16,10 @@
         <tbody>
             @foreach($usersWithReferrals as $user)
             <tr>
-                <td>{{ $user->id }}</td>
-                <td>{{ $user->name }}</td>
-                <td>{{ $user->referrals->count() }}</td>
-                <td>
+                <td data-label="ID">{{ $user->id }}</td>
+                <td data-label="Parrain">{{ $user->name }}</td>
+                <td data-label="Nombre de filleuls">{{ $user->referrals->count() }}</td>
+                <td data-label="Filleuls">
                     @foreach($user->referrals as $referral)
                         {{ $referral->name }} ({{ $referral->email }})<br>
                     @endforeach
@@ -78,6 +78,48 @@
 .pagination {
     margin-top: 15px;
     text-align: center;
+}
+
+/* -------------------
+   RESPONSIVE DESIGN
+------------------- */
+@media (max-width: 768px) {
+    .referrals-container {
+        padding: 15px;
+    }
+    .referrals-table, 
+    .referrals-table thead, 
+    .referrals-table tbody, 
+    .referrals-table th, 
+    .referrals-table td, 
+    .referrals-table tr {
+        display: block;
+        width: 98%;
+    }
+    .referrals-table thead {
+        display: none; /* cacher l'entête */
+    }
+    .referrals-table tr {
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: #fafafa;
+        padding: 10px;
+    }
+    .referrals-table td {
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 10px;
+    }
+    .referrals-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #007BFF;
+    }
+    .pagination {
+        font-size: 14px;
+    }
 }
 </style>
 @endsection

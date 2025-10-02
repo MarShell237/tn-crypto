@@ -5,46 +5,75 @@
 @section('content')
 <div class="lucky-loop-container">
 
-    <!-- Header -->
     <div class="loop-header">
         <h1>Lucky Loop</h1>
         <p>Tournez la roue et remportez vos récompenses !</p>
     </div>
 
-    <!-- Roulette interactive -->
-    <div class="wheel-wrapper" style="position: relative; display: inline-block;">
-        <div class="wheel-pointer"></div>
-        <canvas id="wheel" width="400" height="400"></canvas>
-        <button id="spin-btn">TOURNER</button>
-    </div>
-
-    <!-- Historique des gains récents -->
-    <div class="recent-wins">
-        <h3> Vos Gains</h3>
-        <ul id="wins-list">
-            @foreach($recentWins as $win)
-                <li>{{ $win->user_name }} a gagné {{ $win->reward }}</li>
-            @endforeach
-        </ul>
-    </div>
-
-    <!-- Modal -->
-    <div id="winModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle">Félicitations !</h2>
-            <p id="modalReward">Vous avez gagné : </p>
-            <button onclick="closeModal()">Fermer</button>
+    <div class="loop-grid">
+        <div class="wheel-wrapper">
+            <div class="wheel-pointer"></div>
+            <canvas id="wheel" width="400" height="400"></canvas>
+            <button id="spin-btn">TOURNER</button>
         </div>
     </div>
+
 </div>
 
 <style>
-/* Styles conservés du code précédent... */
+.lucky-loop-container {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 0 15px;
+    font-family: 'Arial', sans-serif;
+    transform: scale(0.8);
+}
+.loop-header{
+    justify-content: center;
+    text-align: center;
 
+}
+.loop-header h1 {
+    font-size: 2.5rem;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+.loop-header p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.loop-grid {
+    display: flex;
+    justify-content: center; /* centre la roue horizontalement */
+}
+
+.wheel-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#wheel {
+    max-width: 100%; /* permet de réduire le canvas sur petits écrans */
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 50%;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+
+#spin-btn:hover {
+    transform: scale(1.05);
+    filter: brightness(90%);
+}
 </style>
 
 <script>
+// Gestion de la roue inchangée
 const wheel = document.getElementById('wheel');
 const ctx = wheel.getContext('2d');
 
@@ -54,7 +83,7 @@ const segmentsBase = [
     { label: "x2", color: "#28a745", weight: 1 },
     { label: "Code", color: "#ffc107", weight: 2 },
     { label: "x1", color: "#007bff", weight: 2 },
-    { label: "Solde x2", color: "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)", weight: 1 }
+    { label: "Solde x2", color: "#ff0", weight: 1 }
 ];
 
 let weightedSegments = [];
@@ -86,25 +115,9 @@ function drawWheel(highlightIndex=null){
         ctx.beginPath();
         ctx.moveTo(200,200);
         ctx.arc(200,200,200,i*anglePerSegment,(i+1)*anglePerSegment);
-
-        if(seg.color.includes("gradient")){
-            const grad = ctx.createLinearGradient(0,0,400,0);
-            grad.addColorStop(0,"red");
-            grad.addColorStop(0.2,"orange");
-            grad.addColorStop(0.4,"yellow");
-            grad.addColorStop(0.6,"green");
-            grad.addColorStop(0.8,"blue");
-            grad.addColorStop(1,"violet");
-            ctx.fillStyle = grad;
-        } else ctx.fillStyle = seg.color;
-
-        // Clignotement
-        if(highlightIndex===i){
-            ctx.fillStyle = "#ffff00";
-        }
-
+        ctx.fillStyle = seg.color;
+        if(highlightIndex===i) ctx.fillStyle = "#ffff00";
         ctx.fill();
-
         ctx.save();
         ctx.translate(200,200);
         ctx.rotate(i*anglePerSegment + anglePerSegment/2);
@@ -131,7 +144,6 @@ document.getElementById('spin-btn').addEventListener('click', ()=>{
     wheel.style.transform=`rotate(${randomAngle}deg)`;
 
     setTimeout(()=>{
-        // Clignotement du segment choisi
         let blinkCount=0;
         const blinkInterval = setInterval(()=>{
             drawWheel(blinkCount%2===0 ? randomIndex : null);
@@ -139,39 +151,9 @@ document.getElementById('spin-btn').addEventListener('click', ()=>{
             if(blinkCount>5) clearInterval(blinkInterval);
         },300);
 
-        showModal(finalSegment.label);
-
-        // Sauvegarder le gain via AJAX
-        fetch("{{ route('lucky-loop.spin') }}", {
-            method:'POST',
-            headers:{
-                "Content-Type":"application/json",
-                "X-CSRF-TOKEN":"{{ csrf_token() }}"
-            },
-            body: JSON.stringify({reward: finalSegment.label})
-        }).then(res=>res.json())
-          .then(data=>{
-              if(data.success){
-                  const ul = document.getElementById('wins-list');
-                  const li = document.createElement('li');
-                  li.textContent = "{{ auth()->user()->name }}" + " a gagné " + data.reward;
-                  ul.prepend(li);
-              }
-          });
-
+        alert(`Vous avez gagné : ${finalSegment.label}`); // simple modal pour test
         isSpinning=false;
     },5000);
 });
-
-const modal=document.getElementById('winModal');
-const modalTitle=document.getElementById('modalTitle');
-const modalReward=document.getElementById('modalReward');
-function showModal(reward){
-    modalTitle.textContent="Félicitations !";
-    modalReward.textContent=`Vous avez gagné : ${reward}`;
-    modal.style.display='flex';
-}
-function closeModal(){ modal.style.display='none'; }
-window.addEventListener('click', e=>{if(e.target===modal) closeModal();});
 </script>
 @endsection

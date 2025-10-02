@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="admin-container">
-    <h2>Gestion des Dépôts</h2>
+    <h2>💳 Gestion des Dépôts</h2>
 
     @if(session('success'))
         <div class="alert success">{{ session('success') }}</div>
@@ -41,8 +41,11 @@
                 @forelse($deposits as $deposit)
                     <tr>
                         <td>{{ $deposit->id }}</td>
-                        <td>{{ $deposit->user->name }}<br><small>{{ $deposit->user->email }}</small></td>
-                        <td>{{ number_format($deposit->amount,0,',',' ') }}</td>
+                        <td>
+                            <strong>{{ $deposit->user->name }}</strong>
+                            <br><small>{{ $deposit->user->email }}</small>
+                        </td>
+                        <td><strong>{{ number_format($deposit->amount,0,',',' ') }}</strong></td>
                         <td>{{ $deposit->method }}</td>
                         <td>{{ $deposit->reference }}</td>
                         <td>
@@ -54,7 +57,7 @@
                                 <span class="status completed">Terminé</span>
                             @endif
                         </td>
-                        <td>{{ $deposit->created_at->format('d/m/Y à H:i') }}</td>
+                        <td>{{ $deposit->created_at->format('d/m/Y H:i') }}</td>
                         <td>
                             @if($deposit->status === 'pending')
                                 <form method="POST" action="{{ route('admin.deposit.validate', $deposit->id) }}">
@@ -77,7 +80,7 @@
 </div>
 
 <style>
-/* Container principal */
+/* --- Container --- */
 .admin-container {
     max-width: 1200px;
     margin: 40px auto;
@@ -87,15 +90,15 @@
     border-radius: 10px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.05);
 }
-
 .admin-container h2 {
     text-align: center;
     color: #0e1577;
     margin-bottom: 30px;
-    font-size: 28px;
+    font-size: 26px;
+    font-weight: 600;
 }
 
-/* Alertes */
+/* --- Alertes --- */
 .alert {
     padding: 15px 20px;
     border-radius: 8px;
@@ -106,11 +109,9 @@
 .alert.success { background: #e6f9ed; color: #0a7f3e; }
 .alert.error { background: #ffe6e6; color: #a00; }
 
-/* Filtre */
-.filter-form {
-    margin-bottom: 20px;
-    text-align: right;
-}
+/* --- Filtre --- */
+.filter-form { margin-bottom: 20px; text-align: right; }
+.filter-form label { margin-right: 10px; font-weight: 500; }
 .filter-form select {
     padding: 7px 14px;
     border-radius: 6px;
@@ -118,37 +119,35 @@
     font-size: 14px;
     transition: 0.3s;
 }
-.filter-form select:hover {
-    border-color: #0e1577;
-}
+.filter-form select:hover { border-color: #0e1577; }
 
-/* Table */
-.table-container {
-    overflow-x: auto;
-}
+/* --- Table --- */
+.table-container { overflow-x: auto; }
 .deposits-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 800px;
+    min-width: 850px;
 }
 .deposits-table th, .deposits-table td {
     padding: 14px 12px;
     border-bottom: 1px solid #eee;
     text-align: left;
+    vertical-align: middle;
 }
 .deposits-table th {
-    background: #f8f8f8;
+    background: #f8f9fc;
     color: #0e1577;
     font-weight: 600;
+    font-size: 14px;
 }
-.deposits-table td small {
-    color: #666;
-    font-size: 12px;
+.deposits-table tbody tr:nth-child(even) {
+    background: #fafafa;
 }
+.deposits-table td small { color: #666; font-size: 12px; }
 
-/* Statuts */
+/* --- Statuts --- */
 .status {
-    padding: 4px 10px;
+    padding: 6px 12px;
     border-radius: 20px;
     font-weight: 600;
     font-size: 13px;
@@ -158,7 +157,7 @@
 .status.validated { background: #e6f9ed; color: #16a34a; }
 .status.completed { background: #e5e8ff; color: #0e1577; }
 
-/* Boutons */
+/* --- Boutons --- */
 .btn-validate {
     background: linear-gradient(135deg,#0e1577,#2865c2);
     color: #fff;
@@ -167,7 +166,7 @@
     border-radius: 8px;
     cursor: pointer;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 13px;
     transition: all 0.3s;
 }
 .btn-validate:hover {
@@ -175,15 +174,36 @@
     transform: scale(1.05);
 }
 
-/* Texte désactivé */
+/* --- Texte désactivé --- */
 .text-muted { color: #999; font-style: italic; }
 
-/* Aucune donnée */
+/* --- Aucune donnée --- */
 .no-data { text-align: center; font-style: italic; color: #555; padding: 20px 0; }
 
-/* Responsive */
-@media(max-width:768px){
-    .deposits-table th, .deposits-table td { padding: 10px 5px; font-size: 13px; }
+/* --- Responsive --- */
+@media (max-width:1024px){
+    .deposits-table th, .deposits-table td { padding: 10px 8px; font-size: 13px; }
+    .btn-validate { font-size: 12px; padding: 6px 12px; }
+}
+@media (max-width:768px){
+    .filter-form { text-align: center; }
+    .filter-form label { display:block; margin-bottom:8px; }
+    .filter-form select { width: 100%; }
+
+    .deposits-table { min-width: 720px; }
+    .deposits-table th, .deposits-table td { font-size: 12px; padding: 8px 6px; }
+
+    .status { font-size: 11px; padding: 4px 8px; }
+}
+@media (max-width:480px){
+    .admin-container { padding: 15px; }
+    .admin-container h2 { font-size: 20px; }
+
+    .deposits-table { min-width: 600px; }
+    .deposits-table th, .deposits-table td { font-size: 11px; padding: 6px 4px; }
+
+    .status { font-size: 10px; padding: 3px 6px; }
+    .btn-validate { font-size: 11px; padding: 5px 10px; }
 }
 </style>
 @endsection

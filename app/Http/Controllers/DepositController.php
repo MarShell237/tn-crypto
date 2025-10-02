@@ -32,7 +32,7 @@ class DepositController extends Controller
 
         $user = Auth::user();
 
-        //  Créer un dépôt en attente de validation admin
+        // Créer un dépôt en attente de validation admin
         $deposit = Deposit::create([
             'user_id'   => $user->id,
             'amount'    => $request->input('amount'),
@@ -42,11 +42,16 @@ class DepositController extends Controller
             'reference' => Str::upper(Str::random(10)),
         ]);
 
-        //  Redirection selon la méthode choisie
+        // Redirection selon la méthode choisie
         if ($deposit->method === 'CRYPTO') {
             return redirect()->route('depot.crypto', $deposit->id);
         }
 
+        if ($deposit->method === 'autres') {
+            return redirect()->route('depot.others', $deposit->id);
+        }
+
+        // Par défaut, instructions MOMO / OM
         return redirect()->route('depot.instructions', $deposit->id);
     }
 
@@ -71,5 +76,17 @@ class DepositController extends Controller
             ?? '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa';
 
         return view('deposits.crypto', compact('deposit', 'walletAddress'));
+    }
+
+    // Vue pour "Autres"
+    public function others(Deposit $deposit)
+    {
+        if ($deposit->method !== 'autres') {
+            abort(404);
+        }
+
+        $paymentLink = 'https://vnvshfpe.mychariow.store/prd_11vdjr/checkout';
+
+        return view('deposits.others', compact('deposit', 'paymentLink'));
     }
 }

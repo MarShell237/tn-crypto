@@ -24,6 +24,7 @@
         <button class="modal-btn" onclick="closeModal()">Commencer</button>
     </div>
 </div>
+
 <!-- Carrousel -->
 <div class="carousel">
     <div class="carousel-slide active">
@@ -51,12 +52,12 @@
     @if(auth()->user()->is_admin) 
     <div class="feature-row">
         <div class="feature-card">
-                <!-- ou une condition selon ton modèle -->
-                        <h1>Admin Dashboard</h1><a href="{{ route('admin.dashboard') }}" class="active">Dashboard</a>  
-            </div>    
-        </div>
-     @endif
-     @endauth
+            <h1>Admin Dashboard</h1>
+            <a href="{{ route('admin.dashboard') }}" class="active">Dashboard</a>  
+        </div>    
+    </div>
+    @endif
+    @endauth
 
     <div class="feature-row">
         <div class="feature-card amount">
@@ -70,19 +71,14 @@
     </div>
 
     <div class="feature-row">
-        <a href="{{ route('depot.create') }}"></a>
-            <div class="feature-card deposit">
-                <h3><i class="fas fa-arrow-down icon-card"></i> Dépôt</h3>
-                <a href="{{ route('depot.create') }}"><button>Faire un dépôt</button></a>
-            </div>
-        </a>
-
-        <a href="{{ route('withdrawals.create') }}"></a>
+        <div class="feature-card deposit">
+            <h3><i class="fas fa-arrow-down icon-card"></i> Dépôt</h3>
+            <a href="{{ route('depot.create') }}"><button>Faire un dépôt</button></a>
+        </div>
         <div class="feature-card withdraw">
             <h3><i class="fas fa-arrow-up icon-card"></i> Retrait</h3>
             <a href="{{ route('withdrawals.create') }}"><button>Faire un retrait</button></a>
         </div>
-        </a>
     </div>
 
     <div class="feature-row">
@@ -92,10 +88,10 @@
                 <p>Voir les produits</p>
             </div>
         </a>
-        <a class="minages_a feature-card" href="/minages">
+        <a class="minages_a feature-card" href="/withdrawals/history">
             <div class="feature-card minages">
-                <h3><i class="fas fa-cogs icon-card"></i> Minages</h3>
-                <p>Venez miner et gagnez des récompenses</p>
+                <h3><i class="fas fa-cogs icon-card"></i> Historiques</h3>
+                <p>Consulter l'historique de vos retraits</p>
             </div>
         </a>
         <a class="feature-card" href="{{ route('partenaire.index') }}">
@@ -120,286 +116,81 @@
             </div>
         </div>
     </a>
-
 </div>
 
 <!-- Styles -->
 <style>
 /* Global */
-body {
-    background-color: #f4f6f8;
-    font-family: 'Poppins', Arial, sans-serif;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
+body { background-color: #f4f6f8; font-family: 'Poppins', Arial, sans-serif; color: #333; margin: 0; padding: 0; }
 
 /* Carrousel */
-.carousel {
-    position: relative;
-    width: 100%;
-    max-width: 1200px;
-    height: 350px;
-    margin: 20px auto;
-    overflow: hidden;
-    border-radius: 15px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-    display:none;
-}
-.carousel-slide {
-    position: absolute;
-    top: 0;
-    left: 100%;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: all 0.8s ease-in-out;
-}
-.carousel-slide.active {
-    left: 0;
-    opacity: 1;
-}
-.carousel-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 15px;
-}
-
-/* Carrousel boutons */
-.prev, .next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255,165,0,0.8);
-    color: #fff;
-    border: none;
-    padding: 12px 18px;
-    cursor: pointer;
-    border-radius: 50%;
-    font-size: 20px;
-    transition: all 0.3s ease;
-    z-index: 2;
-}
-.prev:hover, .next:hover { 
-    background: rgba(255,140,0,0.9);
-    transform: scale(1.1);
-}
-.prev { left: 15px; }
-.next { right: 15px; }
+.carousel { position: relative; width: 100%; max-width: 1200px; height: 350px; margin: 20px auto; overflow: hidden; border-radius: 15px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); display:none; }
+.carousel-slide { position: absolute; top: 0; left: 100%; width: 100%; height: 100%; opacity: 0; transition: all 0.8s ease-in-out; }
+.carousel-slide.active { left: 0; opacity: 1; }
+.carousel-slide img { width: 100%; height: 100%; object-fit: cover; border-radius: 15px; }
+.prev, .next { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,165,0,0.8); color: #fff; border: none; padding: 12px 18px; cursor: pointer; border-radius: 50%; font-size: 20px; transition: all 0.3s ease; z-index: 2; }
+.prev:hover, .next:hover { background: rgba(255,140,0,0.9); transform: scale(1.1); }
+.prev { left: 15px; } .next { right: 15px; }
 
 /* Marquee */
-.marquee {
-    background: #e0e4e8;
-    color: #333;
-    overflow: hidden;
-    white-space: nowrap;
-    padding: 12px 0;
-    margin: 20px auto;
-    max-width: 1200px;
-    border-radius: 10px;
-}
-.marquee p {
-    display: inline-block;
-    padding-left: 100%;
-    animation: marquee 15s linear infinite;
-    font-weight: 500;
-}
-@keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-}
+.marquee { background: #e0e4e8; color: #333; overflow: hidden; white-space: nowrap; padding: 12px 0; margin: 20px auto; max-width: 1200px; border-radius: 10px; }
+.marquee p { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; font-weight: 500; }
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
 /* Features */
-.features {
-    max-width: 1200px;
-    margin: 30px auto;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-.feature-row {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-.feature-card {
-    flex: 1;
-    min-width: 130px;
-    padding: 25px 20px;
-    border-radius: 15px;
-    text-align: center;
-    color: #333;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.minages_a{
-    width: 39%;
-}
+.features { max-width: 1200px; margin: 30px auto; display: flex; flex-direction: column; gap: 25px; }
+.feature-row { display: flex; gap: 20px; flex-wrap: wrap; }
+.feature-card { flex: 1; min-width: 130px; padding: 25px 20px; border-radius: 15px; text-align: center; color: #333; box-shadow: 0 6px 18px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s; }
+.minages_a{ width: 39%; }
 .feature-card h3 { margin-bottom: 10px; font-size: 18px; }
 .feature-card p { font-size: 16px; }
-.feature-card button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    background:  #F7931A;
-    color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-.feature-card button:hover {
-    background:  #F7931A;
-    transform: scale(1.05);
-}
-.feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
+.feature-card button { margin-top: 10px; padding: 10px 20px; border: none; border-radius: 8px; background:  #F7931A; color: #fff; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+.feature-card button:hover { background:  #F7931A; transform: scale(1.05); }
+.feature-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+.feature-card:not(.bonus) { background: #0e1577ff; color: #fff; }
+.feature-card.bonus { background: #0e1577ff; color: #fff; }
 
-/* Couleurs des cartes */
-/* Même couleur pour toutes sauf la dernière */
-.feature-card:not(.bonus) {
-    background: #0e1577ff; /* couleur uniforme pour toutes les cartes */
-    color: #fff; /* texte blanc pour contraste */
-}
-
-/* Dernière carte bonus */
-.feature-card.bonus {
-    background: #0e1577ff; 
-    color: #fff; 
-}
-
-.card-icon {
-    font-size: 24px;
-    margin-bottom: 8px;
-    color: #F7931A; /* couleur or/crypto */
-    display: block;
-}
-
+/* Modal */
+.modal { display: flex; align-items: center; justify-content: center; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 80%; background: rgba(0,0,0,0.6); animation: fadeIn 1s; }
+.modal-content { background: #fff; border-radius: 15px; max-width: 400px; width: 70%; padding: 10px; text-align: center; position: relative; animation: slideDown 0.5s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+.big-icon { font-size: 3.5rem; margin-bottom: 15px; color:#F7931A; }
+.welcome-text { font-size: 1rem; margin-bottom: 20px; color: #444; }
+.platform-brief { list-style: none; padding: 0; margin: 0 0 20px; text-align: left; }
+.platform-brief li { font-size: 1rem; padding: 8px 0; border-bottom: 1px solid #eee; }
+.platform-brief i { color: #0e1577; margin-right: 10px; }
+.modal-btn { padding: 12px 25px; background: #F7931A; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+.modal-btn:hover { background:  #f7941ad3; }
+.close-btn { position: absolute; top: 12px; right: 18px; font-size: 1.5rem; cursor: pointer; color: #888; transition: color 0.3s; }
+.close-btn:hover { color: #000; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
 /* Responsive */
+@media (max-width: 1024px) {
+    .features { margin: 20px auto; }
+    .feature-row { gap: 15px; }
+    .feature-card { padding: 10px; font-size: 0.95em; }
+    .feature-card button { padding: 8px 16px; font-size: 0.85em; }
+}
+
 @media (max-width: 768px) {
-    .carousel { height: 200px; display:block;}
-
-    /*  Affichage en grille 2 colonnes */
-    .feature-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr; /* 2 colonnes */
-        gap: 10px;
-        width: 75%;
-        margin-left: -4%;
-        transform: scale(0.9);
-    }
-    .feature-card {
-        width: 50%;
-    }
-
-    /* Centrer la dernière card si nombre impair */
-    .feature-row .feature-card:last-child:nth-child(odd) {
-        grid-column: span 2;
-        justify-self: center;
-        width: 50%; /* tu peux ajuster */
-    }
-
-    .product_responsive {
-        margin-top: -20px;
-        width: 100%;
-    }
+    .carousel { height: 200px; display:block; }
+    .feature-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 90%; margin-left: auto; margin-right: auto; }
+    .feature-card { width: 100%;margin-left: -20px; }
+    .feature-row .feature-card:last-child:nth-child(odd) { grid-column: span 2; justify-self: center; }
+    .product_responsive { width: 100%; margin-top: -10px; }
+    .modal-content { width: 90%; max-width: 350px; padding: 10px; }
+    .welcome-text { font-size: 0.9rem; }
+    .platform-brief li { font-size: 0.85rem; padding: 6px 0; }
+    .marquee p { font-size: 0.85rem; }
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
-    .feature-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr; /* 2 colonnes aussi sur tablette */
-        gap: 20px;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 1024px) {
-    .feature-row { flex-wrap: wrap; }
-    .feature-card { flex: 2 2 calc(50% - 20px); }
-}
-.modal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    z-index: 1000;
-    left: 0; top: 0;
-    width: 100%; height: 80%;
-    background: rgba(0,0,0,0.6);
-    animation: fadeIn 1s;
-}
-.modal-content {
-    background: #fff;
-    border-radius: 15px;
-    max-width: 400px;
-    width: 70%;
-    padding: 10px;
-    text-align: center;
-    position: relative;
-    animation: slideDown 0.5s ease;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-.modal-header {
-    margin-bottom: 20px;
-}
-.big-icon {
-    font-size: 3.5rem;
-    color:  #F7931A;
-    margin-bottom: 15px;
-}
-.welcome-text {
-    font-size: 1rem;
-    margin-bottom: 20px;
-    color: #444;
-}
-.platform-brief {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 20px;
-    text-align: left;
-}
-.platform-brief li {
-    font-size: 1rem;
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-}
-.platform-brief i {
-    color: #0e1577;
-    margin-right: 10px;
-}
-.modal-btn {
-    padding: 12px 25px;
-    background:  #F7931A;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-.modal-btn:hover {
-    background:  #f7941ad3;
-}
-.close-btn {
-    position: absolute;
-    top: 12px; right: 18px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #888;
-    transition: color 0.3s;
-}
-.close-btn:hover { color: #000; }
-
-@keyframes fadeIn {
-    from { opacity: 0; } to { opacity: 1; }
-}
-@keyframes slideDown {
-    from { transform: translateY(-30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+@media (max-width: 480px) {
+    .carousel { height: 150px; }
+    .feature-card { padding: 10px; font-size: 0.8em; margin-left: -20px;}
+    .feature-card h3 { font-size: 1em; }
+    .feature-card p { font-size: 0.75em; }
+    .feature-card button { font-size: 0.8em; padding: 6px; }
 }
 </style>
 
@@ -407,42 +198,17 @@ body {
 <script>
 let currentSlide = 0;
 const slides = document.querySelectorAll('.carousel-slide');
-
 function showSlide(index) {
-    slides.forEach((s, i) => {
-        s.classList.remove('active');
-        if (i === index) s.classList.add('active');
-    });
+    slides.forEach((s, i) => { s.classList.remove('active'); if(i===index)s.classList.add('active'); });
 }
-
-function changeSlide(n) {
-    currentSlide += n;
-    if (currentSlide < 0) currentSlide = slides.length - 1;
-    if (currentSlide >= slides.length) currentSlide = 0;
-    showSlide(currentSlide);
-}
-
+function changeSlide(n) { currentSlide += n; if(currentSlide<0) currentSlide=slides.length-1; if(currentSlide>=slides.length) currentSlide=0; showSlide(currentSlide);}
 showSlide(currentSlide);
-setInterval(() => changeSlide(1), 5000);
+setInterval(()=>changeSlide(1),5000);
 
-// ===== Modal =====
 const modal = document.getElementById("welcomeModal");
-
-function closeModal() {
-    modal.style.display = "none";
-}
-
-// Ouvrir automatiquement au chargement
-window.onload = () => {
-    modal.style.display = "flex";
-};
-
-// Fermer quand on clique en dehors du contenu
-window.addEventListener("click", function(e) {
-    if (e.target === modal) {
-        closeModal();
-    }
-});
+function closeModal() { modal.style.display = "none"; }
+window.onload = ()=> { modal.style.display = "flex"; }
+window.addEventListener("click", function(e){ if(e.target===modal) closeModal(); });
 </script>
 
 @endsection

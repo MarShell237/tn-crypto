@@ -19,6 +19,7 @@
                     <th>Solde</th>
                     <th>Parrain</th>
                     <th>Filleuls</th>
+                    <th>Produits achetés</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -32,6 +33,17 @@
                     <td>{{ number_format($user->balance, 2) }} €</td>
                     <td>{{ $user->referrer ? $user->referrer->name : '-' }}</td>
                     <td>{{ $user->referrals->count() }}</td>
+                    <td>
+                        @if($user->produits->count())
+                            <ul class="user-produits-list">
+                                @foreach($user->produits as $produit)
+                                    <li>{{ $produit->nom }}</li>
+                                @endforeach
+                            </ul>
+                        @else
+                            -
+                        @endif
+                    </td>
                     <td class="actions-column">
                         <a href="{{ route('admin.users.show', $user->id) }}" class="btn-view">Voir</a>
                         <a href="{{ route('admin.users.edit', $user->id) }}" class="btn-edit">Modifier</a>
@@ -54,7 +66,7 @@
 
 <style>
 .users-list-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 40px auto;
     padding: 20px;
     background: #fdfdfd;
@@ -150,6 +162,40 @@
     background: #007BFF;
     color: #fff;
     border: 1px solid #007BFF;
+}
+
+.user-produits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.user-produits-list li {
+    background: #e7f1ff;
+    color: #0056b3;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 2px;
+    font-size: 0.85em;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 1024px) {
+    .users-table th, .users-table td { font-size: 0.85em; padding: 8px; }
+    .actions-column a, .actions-column button { padding: 4px 8px; font-size: 0.8em; }
+}
+
+@media (max-width: 768px) {
+    .users-table th, .users-table td { font-size: 0.8em; padding: 6px; }
+    .actions-column a, .actions-column button { padding: 3px 6px; font-size: 0.75em; }
+    .user-produits-list li { font-size: 0.75em; padding: 2px 4px; }
+}
+
+@media (max-width: 480px) {
+    .users-table th, .users-table td { font-size: 0.75em; padding: 4px; }
+    .actions-column a, .actions-column button { display: block; margin: 2px 0; font-size: 0.7em; width: 100%; box-sizing: border-box; }
+    .user-produits-list li { display: block; margin: 2px 0; }
 }
 </style>
 @endsection

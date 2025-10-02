@@ -64,26 +64,82 @@
 </div>
 
 <style>
-.produit-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; text-align: center; }
-.produit-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 40px; color: #222; }
+/* Container global */
+.produit-container {
+    width: auto;
+    margin: 0 auto;
+    padding: 10px 10px;
+    text-align: center;
+}
 
-.crypto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; }
+/* Titre principal */
+.produit-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 50px;
+    color: #222;
+}
 
+/* Grid responsive */
+.crypto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+/* Carte crypto */
 .crypto-card {
-    border-radius: 18px;
-    padding: 25px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    border-radius: 20px;
+    padding: 10px 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
-    transform: scale(0.9);
+    transform: scale(0.95);
 }
-.crypto-card:hover { transform: translateY(-8px); box-shadow: 0 12px 30px rgba(0,0,0,0.15); }
-.crypto-card .icon { font-size: 3rem; margin-bottom: 15px; }
-.crypto-card h3 { font-size: 1.5rem; margin-bottom: 15px; font-weight: 700; color: #111; }
-.crypto-card p { margin: 6px 0; font-size: 1rem; color: #555; }
-.crypto-card p i { color: #0e1577; margin-right: 6px; }
-.crypto-card span { font-weight: 600; color: #000; }
-.crypto-card .revenu { color: #16a34a; font-weight: 700; }
+.crypto-card:hover {
+    transform: translateY(-10px) scale(1);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+/* Icone */
+.crypto-card .icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+}
+
+/* Nom crypto */
+.crypto-card h3 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #111;
+}
+
+/* Paragraphes */
+.crypto-card p {
+    margin: 8px 0;
+    font-size: 1rem;
+    color: #555;
+}
+.crypto-card p i {
+    color: #0e1577;
+    margin-right: 6px;
+}
+.crypto-card span {
+    font-weight: 600;
+    color: #000;
+}
+.crypto-card .revenu {
+    color: #16a34a;
+    font-weight: 700;
+}
+
+/* Responsive sur mobile */
+@media (max-width: 768px) {
+    .produit-container { padding: 30px 15px; }
+    .crypto-card { padding: 25px 15px; }
+    .crypto-card h3 { font-size: 1.4rem; }
+}
 </style>
 
 <script>

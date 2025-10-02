@@ -84,6 +84,55 @@
     .btn-configure:hover {
         background: #e0a800;
     }
+
+    /* -------------------
+       RESPONSIVE DESIGN
+    ------------------- */
+    @media (max-width: 768px) {
+        .bonus-admin-card {
+            padding: 10px;
+        }
+        .bonus-admin-card h2 {
+            font-size: 20px;
+        }
+        .btn-generate {
+            width: 100%;
+            justify-content: center;
+            font-size: 14px;
+            padding: 10px;
+        }
+        table, thead, tbody, th, td, tr {
+            display: block;
+            width: 98%;
+        }
+        thead {
+            display: none; /* cacher l'entête sur mobile */
+        }
+        tbody tr {
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            background: #fafafa;
+        }
+        tbody td {
+            text-align: left;
+            padding: 8px 10px;
+            border: none;
+            display: flex;
+            justify-content: space-between;
+        }
+        tbody td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            color: #007bff;
+        }
+        .btn-configure {
+            width: 100%;
+            justify-content: center;
+            margin-top: 8px;
+        }
+    }
 </style>
 
 <div class="bonus-admin-wrapper">
@@ -109,27 +158,27 @@
         <table>
             <thead>
                 <tr>
-                    <th><i class="fas fa-ticket-alt"></i> Code</th>
-                    <th><i class="fas fa-coins"></i> Montant</th>
-                    <th><i class="far fa-clock"></i> Expiration</th>
-                    <th><i class="fas fa-toggle-on"></i> Actif</th>
-                    <th><i class="fas fa-tools"></i> Actions</th>
+                    <th>Code</th>
+                    <th>Montant</th>
+                    <th>Expiration</th>
+                    <th>Actif</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($bonuses as $bonus)
                     <tr>
-                        <td>{{ $bonus->code }}</td>
-                        <td>{{ $bonus->amount ?? 'Non défini' }}</td>
-                        <td>{{ $bonus->expires_at ?? 'Non défini' }}</td>
-                        <td>
+                        <td data-label="Code">{{ $bonus->code }}</td>
+                        <td data-label="Montant">{{ $bonus->amount ?? 'Non défini' }}</td>
+                        <td data-label="Expiration">{{ $bonus->expires_at ?? 'Non défini' }}</td>
+                        <td data-label="Actif">
                             @if($bonus->is_active)
                                 <i class="fas fa-check-circle" style="color:green;"></i> Oui
                             @else
                                 <i class="fas fa-times-circle" style="color:red;"></i> Non
                             @endif
                         </td>
-                        <td>
+                        <td data-label="Actions">
                             <a href="{{ route('bonus.edit', $bonus->id) }}" class="btn-configure">
                                 <i class="fas fa-edit"></i> Configurer
                             </a>

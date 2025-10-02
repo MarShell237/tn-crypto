@@ -135,6 +135,10 @@
         <a href="{{ url('/dashboard') }}">Home</a>
     </div>
     <div class="footer-link">
+        <i class="fas fa-comments"></i>
+        <a href="{{ url('/chat') }}">Chat</a>
+    </div>
+    <div class="footer-link">
         <i class="fas fa-gift"></i>
         <a href="{{ url('/lucky-loop') }}">Lucky Loop</a>
     </div>

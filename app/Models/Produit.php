@@ -45,4 +45,11 @@ class Produit extends Model
             ->withTimestamps();
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_produit', 'produit_id', 'user_id')
+                    ->withTimestamps();
+    }
+
+
 }

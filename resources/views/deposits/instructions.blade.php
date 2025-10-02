@@ -15,14 +15,25 @@
 
         <div class="instructions">
             <h4><i class="fas fa-info-circle"></i> Mode: {{ $deposit->method }}</h4>
-            <p>Envoyez le montant exact au numéro suivant depuis votre compte mobile (ou suivez la procédure de votre opérateur) :</p>
+            <p>Envoyez le montant exact au numéro suivant depuis votre compte mobile (ou suivez la procédure de votre opérateur) le composant le <strong>#150*11*692496299#</strong></p>
 
             <ul>
-                <li>Numéro à payer : <strong>+237 698 754 354</strong> (Arold Diva)</li>
+                <li>Numéro à payer : <strong>+(237) 692496299</strong> (SAMPSON ABANE)</li>
                 <li>Message / Motif : <strong>{{ $deposit->reference }}</strong></li>
             </ul>
 
             <p class="note">Après le dépôt, envoyez une capture au support pour confirmation.</p>
+        </div>
+
+        <!-- Informations importantes -->
+        <div class="important-info">
+            <h4><i class="fas fa-exclamation-triangle"></i> Informations Importantes</h4>
+            <ul>
+                <li>1️⃣ Le <strong>minimum de retrait est 1 000 FCFA</strong> avec <strong>10% de frais</strong>.</li>
+                <li>2️⃣ Les retraits sont traités du lundi au vendredi, de 9h à 17h, et prennent <strong>moins de 12 heures</strong>.</li>
+                <li>3️⃣ Assurez-vous que le <strong>nom du titulaire</strong> et l'<strong>identifiant de retrait</strong> sont corrects pour éviter les retards.</li>
+                <li>4️⃣ Vous devez avoir un <strong>plan VIP actif</strong> pour pouvoir effectuer un retrait.</li>
+            </ul>
         </div>
 
         <div class="action">
@@ -115,6 +126,31 @@ body {
     font-size: 13px;
     color: #0e1577;
     font-weight: 600;
+}
+
+/* Informations importantes */
+.important-info {
+    background: #fff3cd;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.important-info h4 {
+    color: #856404;
+    margin-bottom: 12px;
+}
+
+.important-info ul {
+    padding-left: 20px;
+}
+
+.important-info ul li {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #856404;
 }
 
 /* Bouton retour */

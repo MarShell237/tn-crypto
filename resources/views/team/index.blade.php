@@ -57,7 +57,7 @@
             </div>
         </div>
         @if($directReferralsCount >= 50)
-            <p class="status success">🎉 Félicitations ! Vous êtes devenu Partenaire.</p>
+            <p class="status success"> Félicitations ! Vous êtes devenu Partenaire.</p>
         @else
             <p class="status">Encore {{ 50 - $directReferralsCount }} filleuls pour devenir Partenaire.</p>
         @endif
@@ -75,7 +75,7 @@
 }
 
 .team-container h2 {
-    font-size: 32px;
+    font-size: clamp(22px, 5vw, 32px);
     margin-bottom: 10px;
     color: #0e1577ff;
 }
@@ -88,17 +88,15 @@
 
 /* Bloc d'invitation */
 .invite-container {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
     justify-content: center;
 }
 
 .invite-card {
     background: #fff;
-    flex: 1 1 300px;
-    width: 270px;
-    padding: 2px 20px;
+    padding: 20px;
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     transition: transform 0.3s, box-shadow 0.3s;
@@ -118,10 +116,12 @@
 .input-copy {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .input-copy input {
     flex: 1;
+    min-width: 200px;
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ccc;
@@ -138,6 +138,7 @@
     font-weight: bold;
     cursor: pointer;
     transition: background 0.3s, transform 0.2s;
+    flex-shrink: 0;
 }
 
 .input-copy button:hover {
@@ -167,17 +168,14 @@
 
 /* Section niveaux */
 .levels-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
-    justify-content: center;
     margin-top: 50px;
-    flex-wrap: wrap;
 }
 
 .level-card {
     background: #e0f0ff;
-    flex: 1 1 200px;
-    max-width: 250px;
     padding: 25px 20px;
     border-radius: 12px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.1);
@@ -203,7 +201,7 @@
 }
 
 .level-count {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
     color: #0e1577ff;
 }
@@ -226,8 +224,7 @@
 
 .progress-bar {
     width: 100%;
-    max-width: 500px;
-    height: 30px;
+    height: 25px;
     background: #e0e0e0;
     border-radius: 10px;
     margin: 15px auto;
@@ -268,36 +265,14 @@
 }
 
 /* Responsive */
-.invite-card,
-.level-card {
-    min-height: 150px; /* hauteur normale */
-}
-
-@media(max-width: 768px) {
-    .invite-container,
-    .levels-container {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .invite-card,
-    .level-card {
-        max-height: 90px; /* 2x moins haut */
-    }
-
-    .level-card {
-        padding: 0;
-        justify-content: center;
-    }
-
+/* @media(max-width: 600px) {
     .input-copy {
         flex-direction: column;
     }
-
     .input-copy button {
         width: 100%;
     }
-}
+} */
 </style>
 
 <script>

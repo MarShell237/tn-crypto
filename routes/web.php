@@ -4,6 +4,7 @@ use App\Models\Bonus;
 use App\Models\Withdrawal;
 use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
@@ -27,6 +28,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminWithdrawalController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -40,6 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::get('/depot/others/{deposit}', [DepositController::class, 'others'])->name('depot.others');
+
 
 
 
@@ -217,4 +221,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/bonus/use', [UserBonusController::class, 'showForm'])->name('bonus.use');
     Route::post('/bonus/use', [UserBonusController::class, 'apply'])->name('bonus.apply');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
 });

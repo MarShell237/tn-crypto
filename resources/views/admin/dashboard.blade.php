@@ -4,14 +4,16 @@
 <div class="dashboard-container">
     <!-- Navigation -->
     <nav class="admin-nav">
-        <ul>
-            <li><a href="{{ route('admin.dashboard') }}" class="active">Dashboard</a></li>
-            <li><a href="{{ route('admin.users.index') }}">Utilisateurs</a></li>
-            <li><a href="{{ route('admin.deposits.index') }}">Dépôts</a></li>
-            <li><a href="{{ route('admin.withdrawals.index') }}">Retraits</a></li>
-            <li><a href="{{ route('admin.referrals.index') }}">Parrainages</a></li>
-            <li><a href="{{ route('bonus.index') }}">Bonus</a></li>
-        </ul>
+        <div class="nav-scroll-wrapper">
+            <ul>
+                <li><a href="{{ route('admin.dashboard') }}" class="active">Dashboard</a></li>
+                <li><a href="{{ route('admin.users.index') }}">Utilisateurs</a></li>
+                <li><a href="{{ route('admin.deposits.index') }}">Dépôts</a></li>
+                <li><a href="{{ route('admin.withdrawals.index') }}">Retraits</a></li>
+                <li><a href="{{ route('admin.referrals.index') }}">Parrainages</a></li>
+                <li><a href="{{ route('bonus.index') }}">Bonus</a></li>
+            </ul>
+        </div>
     </nav>
 
     <!-- Titre -->
@@ -41,6 +43,14 @@
     <div class="actions">
         <a href="{{ route('admin.users.index') }}" class="btn">Gérer les utilisateurs</a>
     </div>
+
+    <!-- Graphique -->
+    <div class="chart-container">
+        <canvas id="usersChart"></canvas>
+    </div>
+    <div class="chart-actions">
+        <button onclick="usersChart.resetZoom()" class="btn">Réinitialiser Zoom</button>
+    </div>
 </div>
 
 <style>
@@ -50,19 +60,42 @@
     padding: 10px 0;
     margin-bottom: 20px;
     border-radius: 5px;
+    position: relative;
+}
+
+.nav-scroll-wrapper {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    padding: 0 10px;
+}
+
+/* Gradient indicateur scroll */
+.nav-scroll-wrapper::before,
+.nav-scroll-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 30px;
+    pointer-events: none;
+}
+.nav-scroll-wrapper::before {
+    left: 0;
+    background: linear-gradient(to right, #007BFF 0%, rgba(0,123,255,0) 100%);
+}
+.nav-scroll-wrapper::after {
+    right: 0;
+    background: linear-gradient(to left, #007BFF 0%, rgba(0,123,255,0) 100%);
 }
 
 .admin-nav ul {
     list-style: none;
-    display: flex;
-    justify-content: center;
+    display: inline-flex;
+    gap: 20px;
     margin: 0;
     padding: 0;
-    gap: 20px;
-}
-
-.admin-nav ul li {
-    display: inline;
 }
 
 .admin-nav ul li a {
@@ -70,13 +103,10 @@
     text-decoration: none;
     padding: 8px 15px;
     border-radius: 4px;
+    white-space: nowrap;
     transition: background 0.3s;
 }
-
-.admin-nav ul li a:hover {
-    background: #0056b3;
-}
-
+.admin-nav ul li a:hover { background: #0056b3; }
 .admin-nav ul li a.active {
     background: #fff;
     color: #007BFF;
@@ -88,7 +118,6 @@
     padding: 20px;
     font-family: Arial, sans-serif;
 }
-
 .dashboard-container h1 {
     margin-bottom: 20px;
     text-align: center;
@@ -100,7 +129,6 @@
     gap: 20px;
     margin-bottom: 30px;
 }
-
 .card {
     background: #f9f9f9;
     border: 1px solid #ddd;
@@ -109,27 +137,11 @@
     text-align: center;
     transition: transform 0.2s ease;
 }
+.card:hover { transform: scale(1.05); background: #f0f0f0; }
+.card h3 { margin-bottom: 10px; color: #333; }
+.card p { font-size: 1.5em; font-weight: bold; color: #007BFF; }
 
-.card:hover {
-    transform: scale(1.05);
-    background: #f0f0f0;
-}
-
-.card h3 {
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.card p {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #007BFF;
-}
-
-.actions {
-    text-align: center;
-}
-
+.actions { text-align: center; }
 .btn {
     display: inline-block;
     padding: 10px 20px;
@@ -139,10 +151,7 @@
     border-radius: 5px;
     transition: background 0.3s;
 }
-
-.btn:hover {
-    background: #0056b3;
-}
+.btn:hover { background: #0056b3; }
 
 .chart-container {
     width: 100%;
@@ -155,19 +164,22 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .dashboard-container h1 { font-size: 22px; }
+    .card { padding: 18px; }
+    .card h3 { font-size: 14px; }
+    .card p { font-size: 1.3em; }
+}
 </style>
-<div class="chart-container">
-    <canvas id="usersChart"></canvas>
-</div>
+
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- Chart.js Zoom Plugin -->
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
-
 
 <script>
 const ctx = document.getElementById('usersChart').getContext('2d');
-
 const gradient = ctx.createLinearGradient(0, 0, 0, 400);
 gradient.addColorStop(0, 'rgba(0, 123, 255, 0.4)');
 gradient.addColorStop(1, 'rgba(0, 123, 255, 0)');
@@ -193,34 +205,13 @@ const usersChart = new Chart(ctx, {
     options: {
         responsive: true,
         plugins: {
-            legend: {
-                display: true,
-                labels: { color: '#007BFF', font: { weight: 'bold' } }
-            },
+            legend: { display: true, labels: { color: '#007BFF', font: { weight: 'bold' } } },
             tooltip: { mode: 'index', intersect: false },
-            zoom: {
-                pan: {
-                    enabled: true,
-                    mode: 'x',
-                    modifierKey: 'ctrl',
-                },
-                zoom: {
-                    wheel: { enabled: true },
-                    pinch: { enabled: true },
-                    mode: 'x',
-                }
-            }
+            zoom: { pan: { enabled: true, mode: 'x', modifierKey: 'ctrl' }, zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' } }
         },
         scales: {
-            x: { 
-                ticks: { color: '#333', font: { weight: 'bold' } },
-                grid: { display: false }
-            },
-            y: {
-                beginAtZero: true,
-                ticks: { color: '#333', font: { weight: 'bold' } },
-                grid: { color: 'rgba(0,0,0,0.05)' }
-            }
+            x: { ticks: { color: '#333', font: { weight: 'bold' } }, grid: { display: false } },
+            y: { beginAtZero: true, ticks: { color: '#333', font: { weight: 'bold' } }, grid: { color: 'rgba(0,0,0,0.05)' } }
         }
     }
 });
@@ -228,5 +219,4 @@ const usersChart = new Chart(ctx, {
 <div style="text-align:center; margin-bottom: 20px;">
     <button onclick="usersChart.resetZoom()" class="btn">Réinitialiser Zoom</button>
 </div>
-
 @endsection

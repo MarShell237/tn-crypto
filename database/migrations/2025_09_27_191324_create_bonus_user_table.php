@@ -16,7 +16,11 @@ return new class extends Migration {
     }
 
     public function down(): void
-    {
-        Schema::dropIfExists('bonus_user');
-    }
+{
+    Schema::disableForeignKeyConstraints();
+    Schema::dropIfExists('bonus_user');
+    Schema::dropIfExists('bonuses');
+    Schema::enableForeignKeyConstraints();
+}
+
 };

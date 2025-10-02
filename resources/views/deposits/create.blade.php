@@ -29,6 +29,7 @@
                     @foreach($methods as $m)
                         <option value="{{ $m }}" @if(old('method')===$m) selected @endif>{{ $m }}</option>
                     @endforeach
+                    <option value="autres" @if(old('method')==='autres') selected @endif>Autres</option>
                 </select>
             </div>
 
@@ -66,7 +67,6 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
-/* Wrapper centré */
 .deposit-wrapper {
     display: flex;
     justify-content: center;
@@ -74,7 +74,6 @@ body {
     padding: 50px 15px;
 }
 
-/* Carte principale */
 .deposit-card {
     width: 100%;
     max-width: 550px;
@@ -100,7 +99,6 @@ body {
     margin-bottom: 25px;
 }
 
-/* Champs formulaire */
 .form-group {
     margin-bottom: 20px;
 }
@@ -129,7 +127,6 @@ label {
     display: block;
 }
 
-/* Montants en carte */
 .amount-options {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -168,7 +165,6 @@ label {
     box-shadow: 0 4px 15px rgba(14,21,119,0.3);
 }
 
-/* Bouton */
 .btn-submit {
     width: 100%;
     padding: 14px 0;
@@ -188,7 +184,6 @@ label {
     box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
 
-/* Erreurs */
 .error-messages {
     background: #ffe6e6;
     border: 1px solid #ffb3b3;
@@ -202,13 +197,11 @@ label {
     font-size: 14px;
 }
 
-/* Animations */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive */
 @media(max-width: 576px){
     .deposit-card {
         padding: 25px;
@@ -220,7 +213,44 @@ label {
 function onMethodChange(){
     const method = document.getElementById('method').value;
     const phoneGroup = document.getElementById('phone-group');
+
     phoneGroup.style.display = (method === 'MOMO' || method === 'OM') ? 'block' : 'none';
+
+    let cryptoGroup = document.getElementById('crypto-group');
+    if(method === 'crypto'){
+        if(!cryptoGroup){
+            cryptoGroup = document.createElement('div');
+            cryptoGroup.id = 'crypto-group';
+            cryptoGroup.classList.add('form-group');
+            cryptoGroup.innerHTML = `
+                <label for="crypto_link"><i class="fab fa-bitcoin"></i> Lien Crypto</label>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <input type="text" id="crypto_link" class="form-control" value="TRGcqjYxSdW8MST7paKhUUgb7iJAijozhj" readonly>
+                    <button type="button" onclick="copyCryptoLink()" class="btn-submit" style="padding:6px 10px; font-size:14px;">Copier</button>
+                </div>
+                <small>Copiez ce lien pour effectuer votre paiement en crypto.</small>
+            `;
+            const form = document.getElementById('deposit-form');
+            form.insertBefore(cryptoGroup, form.querySelector('button[type="submit"]'));
+        }
+    } else {
+        if(cryptoGroup){
+            cryptoGroup.remove();
+        }
+    }
 }
+
+function copyCryptoLink(){
+    const linkInput = document.getElementById('crypto_link');
+    linkInput.select();
+    linkInput.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(linkInput.value).then(() => {
+        alert('Lien crypto copié !');
+    }).catch(() => {
+        alert('Impossible de copier le lien.');
+    });
+}
+
+window.addEventListener('DOMContentLoaded', onMethodChange);
 </script>
 @endsection
