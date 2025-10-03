@@ -27,6 +27,10 @@
                 $gradient = $colors[$produit->nom][0] ?? '#ffffff';
                 $gradient2 = $colors[$produit->nom][1] ?? '#f0f0f0';
                 $buttonColor = $colors[$produit->nom][2] ?? '#0e1577';
+
+                // Vérification côté serveur pour savoir si le bouton doit être actif
+                $lastGain = $produit->pivot->last_gain_at ?? null;
+                $canClaim = !$lastGain || now()->diffInHours($lastGain) >= 24;
             @endphp
 
             <div class="crypto-card" style="background: linear-gradient(135deg, {{ $gradient }}, {{ $gradient2 }});">
@@ -35,29 +39,31 @@
 
                 <p>
                     <i class="fas fa-dollar-sign"></i> Prix d’achat :
-                    <span class="prix" data-usdt="{{ $produit->prix }}">
-                        {{ number_format($produit->prix, 2, ',', ' ') }} FCFA
-                    </span>
+                    <span>{{ number_format($produit->pivot->prix, 2, ',', ' ') }} FCFA</span>
                 </p>
 
                 <p>
                     <i class="fas fa-calendar-day"></i> Validité :
-                    <span>{{ $produit->duree }} jours</span>
+                    <span>{{ $produit->pivot->duree }} jours</span>
                 </p>
 
                 <p>
                     <i class="fas fa-chart-line"></i> Revenu journalier :
-                    <span class="revenu" data-usdt="{{ $produit->revenu_journalier }}">
-                        {{ number_format($produit->revenu_journalier, 2, ',', ' ') }} FCFA
-                    </span>
+                    <span class="revenu">{{ number_format($produit->pivot->revenu, 2, ',', ' ') }} FCFA</span>
                 </p>
 
-                <p>
-                    <i class="fas fa-chart-line"></i> Revenu total :
-                    <span class="revenu" data-usdt="{{ $produit->revenu }}">
-                        {{ number_format($produit->revenu, 2, ',', ' ') }} FCFA
-                    </span>
-                </p>
+                {{-- Bouton Gain Journalier sécurisé --}}
+                <form method="POST" action="{{ route('produits.claim', $produit->id) }}">
+                    @csrf
+                    <button 
+                        type="submit"
+                        class="btn-gain"
+                        style="background: {{ $buttonColor }}; color:white; padding:10px 18px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; opacity: {{ $canClaim ? '1' : '0.6' }};"
+                        {{ $canClaim ? '' : 'disabled' }}>
+                        {{ $canClaim ? '🎁 Réclamer mon gain' : '⏳ Déjà réclamé' }}
+                    </button>
+                </form>
+
             </div>
         @endforeach
     </div>
@@ -90,14 +96,13 @@
 /* Carte crypto */
 .crypto-card {
     border-radius: 20px;
-    padding: 10px 12px;
+    padding: 20px 15px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
-    transform: scale(0.95);
 }
 .crypto-card:hover {
-    transform: translateY(-10px) scale(1);
+    transform: translateY(-10px);
     box-shadow: 0 15px 35px rgba(0,0,0,0.15);
 }
 
@@ -134,28 +139,16 @@
     font-weight: 700;
 }
 
-/* Responsive sur mobile */
-@media (max-width: 768px) {
-    .produit-container { padding: 30px 15px; }
-    .crypto-card { padding: 25px 15px; }
-    .crypto-card h3 { font-size: 1.4rem; }
+/* Bouton gain */
+.btn-gain {
+    margin-top: 12px;
+    transition: 0.3s;
+}
+.btn-gain:hover:enabled {
+    transform: scale(1.05);
+}
+.btn-gain:disabled {
+    cursor: not-allowed;
 }
 </style>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const taux = 600; // Conversion USDT -> FCFA
-
-    function formatNombre(n) {
-        return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    }
-
-    document.querySelectorAll(".prix, .revenu").forEach(el => {
-        const usdt = parseFloat(el.getAttribute("data-usdt")) || 0;
-        const fcfa = usdt * taux;
-        el.innerHTML = `${formatNombre(fcfa)} FCFA (≈ ${usdt} USDT)`;
-        el.setAttribute("data-fcfa", fcfa);
-    });
-});
-</script>
 @endsection

@@ -62,7 +62,7 @@
     <div class="feature-row">
         <div class="feature-card amount">
             <h3><i class="fas fa-dollar-sign icon-card"></i> Montant</h3>
-            <p>$0.00</p>
+            <p>{{ number_format($totalGains, 2, ',', ' ') }} FCFA</p>
         </div>
         <div class="feature-card total">
             <h3><i class="fas fa-university icon-card"></i> Compte total</h3>
@@ -165,33 +165,75 @@ body { background-color: #f4f6f8; font-family: 'Poppins', Arial, sans-serif; col
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-/* Responsive */
-@media (max-width: 1024px) {
-    .features { margin: 20px auto; }
-    .feature-row { gap: 15px; }
-    .feature-card { padding: 10px; font-size: 0.95em; }
-    .feature-card button { padding: 8px 16px; font-size: 0.85em; }
-}
-
+/*  Responsive UNIQUEMENT petits écrans */
 @media (max-width: 768px) {
-    .carousel { height: 200px; display:block; }
-    .feature-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 90%; margin-left: auto; margin-right: auto; }
-    .feature-card { width: 100%;margin-left: -20px; }
-    .feature-row .feature-card:last-child:nth-child(odd) { grid-column: span 2; justify-self: center; }
-    .product_responsive { width: 100%; margin-top: -10px; }
-    .modal-content { width: 90%; max-width: 350px; padding: 10px; }
+    body {
+        overflow-x: hidden; /*  empêche scroll horizontal */
+    }
+
+    .carousel { 
+        height: 200px; 
+        display:block; 
+    }
+
+    .feature-row { 
+        display: grid; 
+        grid-template-columns: 1fr 1fr; 
+        gap: 10px; 
+        width: 100%;  /*  prend toute la largeur sans déborder */
+        margin: 0 auto; 
+    }
+
+    .feature-card { 
+        width: 100%; 
+        padding: 12px; 
+        font-size: 0.9em; 
+        margin: 0;   /* supprime margin-left négatif */
+        box-sizing: border-box; /*  pas de dépassement avec padding */
+    }
+
+    .feature-row .feature-card:last-child:nth-child(odd) { 
+        grid-column: span 2; 
+    }
+
+    .product_responsive { 
+        width: 100%; 
+        margin-top: -5px; 
+    }
+
+    .modal-content { 
+        width: 90%; 
+        max-width: 350px; 
+        padding: 10px; 
+    }
+
     .welcome-text { font-size: 0.9rem; }
     .platform-brief li { font-size: 0.85rem; padding: 6px 0; }
     .marquee p { font-size: 0.85rem; }
 }
 
 @media (max-width: 480px) {
+    body {
+        overflow-x: hidden; /*  idem sur mobile */
+    }
+
     .carousel { height: 150px; }
-    .feature-card { padding: 10px; font-size: 0.8em; margin-left: -20px;}
+
+    .feature-card { 
+        padding: 10px; 
+        font-size: 0.8em; 
+        margin: 0; /*  supprime scroll horizontal */
+    }
+
     .feature-card h3 { font-size: 1em; }
     .feature-card p { font-size: 0.75em; }
-    .feature-card button { font-size: 0.8em; padding: 6px; }
+
+    .feature-card button { 
+        font-size: 0.8em; 
+        padding: 6px 10px; 
+    }
 }
+
 </style>
 
 <!-- JS Carrousel + Modal -->

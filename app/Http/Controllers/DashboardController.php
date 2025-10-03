@@ -23,6 +23,9 @@ class DashboardController extends Controller
             });
         });
 
-        return view('team.index', compact('niveauA', 'niveauB', 'niveauC'));
+        //  Cumul des gains journaliers dans la table user_produit
+        $dailyGains = $user->produits()->sum('user_produit.montant');
+
+        return view('dashboard', compact('niveauA', 'niveauB', 'niveauC', 'dailyGains'));
     }
 }

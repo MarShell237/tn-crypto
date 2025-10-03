@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 Route::get('/depot/others/{deposit}', [DepositController::class, 'others'])->name('depot.others');
+Route::post('/produits/{id}/claim', [CryptoController::class, 'claimGain'])->name('produits.claim');
+
 
 
 
@@ -226,4 +228,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
     Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
+});
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [CryptoController::class, 'dashboard'])->name('dashboard');
 });

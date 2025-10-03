@@ -12,17 +12,23 @@ return new class extends Migration
      public function up(): void
     {
         Schema::create('user_produit', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('produit_id')->constrained('produits')->onDelete('cascade');
+        $table->id();
+        $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        $table->foreignId('produit_id')->constrained('produits')->onDelete('cascade');
 
-            // Informations liées à l’achat
-            $table->integer('duree'); 
-            $table->decimal('revenu', 15, 2); 
-            $table->decimal('prix', 15, 2);
+        // Infos liées à l’achat
+        $table->integer('duree'); 
+        $table->decimal('revenu', 15, 2); 
+        $table->decimal('prix', 15, 2);
 
-            $table->timestamps();
-        });
+        // Colonnes pour gestion des gains
+        $table->decimal('montant', 15, 2)->default(0);       // cumul du jour
+        $table->decimal('compte_total', 15, 2)->default(0);  // cumul global
+        $table->timestamp('last_gain_at')->nullable();       // dernière fois qu’il a reçu un gain
+
+        $table->timestamps();
+    });
+
     }
 
     /**
