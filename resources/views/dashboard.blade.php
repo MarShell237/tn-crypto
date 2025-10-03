@@ -5,24 +5,32 @@
 @section('content')
 <!-- Modal Bienvenue -->
 <div id="welcomeModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <div class="modal-header">
-            <i class="fab fa-bitcoin big-icon" style="color:#F7931A;"></i>
-            <h2>Bienvenue sur InvestPro</h2>
-        </div>
-        <p class="welcome-text">
-            Nous sommes ravis de vous accueillir dans votre espace d’investissement sécurisé.  
-            Voici un bref aperçu de notre plateforme :
-        </p>
-        <ul class="platform-brief">
-            <li><i class="fas fa-gift"></i> Bonus d'inscription : <b>1000 FCFA</b></li>
-            <li><i class="fas fa-user-friends"></i> Invitez vos amis et recevez <b>20 % de leur investissement</b></li>
-            <li><i class="fas fa-wallet"></i> Un retrait possible <b>chaque jour</b></li>
-            <li><i class="fas fa-globe"></i> CryptoInvest sera lancé au <b>Cameroun, Bénin et Burkina Faso le 31 août 2025</b></li>
-        </ul>
-        <button class="modal-btn" onclick="closeModal()">Commencer</button>
+   <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <div class="modal-header">
+        <i class="fab fa-bitcoin big-icon" style="color:#F7931A;"></i>
+        <h2>Bienvenue sur InvestPro</h2>
     </div>
+    <p class="welcome-text">
+        Nous sommes ravis de vous accueillir dans votre espace d’investissement sécurisé.  
+        Voici un bref aperçu de notre plateforme :
+    </p>
+    <ul class="platform-brief">
+        <li><i class="fas fa-gift"></i> Bonus d'inscription : <b>1000 FCFA</b></li>
+        <li><i class="fas fa-user-friends"></i> Invitez vos amis et recevez <b>20 % de leur investissement</b></li>
+        <li><i class="fas fa-wallet"></i> Un retrait possible <b>chaque jour</b></li>
+        <li><i class="fas fa-globe"></i> CryptoInvest sera lancé au <b>Cameroun, Bénin et Burkina Faso le 31 août 2025</b></li>
+    </ul>
+
+    <!-- Bouton Telegram -->
+    <a href="https://t.me/Cryptonewinves" target="_blank" rel="noopener noreferrer">
+        <button class="modal-btn">Rejoindre le canal Telegram</button>
+    </a>
+
+    <!-- Bouton Commencer -->
+    <button class="modal-btn" onclick="closeModal()">Commencer</button>
+</div>
+
 </div>
 
 <!-- Carrousel -->

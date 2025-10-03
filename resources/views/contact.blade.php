@@ -11,31 +11,94 @@
     </p>
 
     <div class="contact-grid">
-        <!-- Service Client 1 -->
-        <div class="contact-card">
-            <i class="fas fa-user-tie contact-icon"></i>
-            <h3>Service Client 1</h3>
-            <p><i class="fas fa-phone-alt"></i> +237 6 90 00 00 01</p>
-            <p><i class="fas fa-envelope"></i> support1@investpro.com</p>
-        </div>
-
-        <!-- Service Client 2 -->
-        <div class="contact-card">
-            <i class="fas fa-user-cog contact-icon"></i>
-            <h3>Service Client 2</h3>
-            <p><i class="fas fa-phone-alt"></i> +237 6 90 00 00 02</p>
-            <p><i class="fas fa-envelope"></i> support2@investpro.com</p>
-        </div>
-
         <!-- Telegram -->
         <div class="contact-card">
             <i class="fab fa-telegram-plane contact-icon"></i>
             <h3>Canal Telegram</h3>
             <p>Rejoignez notre communauté officielle</p>
-            <a href="https://t.me/InvestProChannel" target="_blank" class="btn-telegram">
+            <a href="https://t.me/Cryptonewinves" target="_blank" class="btn-telegram">
                 <i class="fab fa-telegram-plane"></i> Rejoindre
             </a>
         </div>
+        <!-- Telegram -->
+        <div style="background:#fff; border-radius:12px; padding:20px; text-align:center; 
+                    box-shadow:0 4px 12px rgba(0,0,0,0.1); max-width:250px; margin:auto;">
+            
+            <i class="fab fa-telegram-plane" style="font-size:40px; margin-bottom:10px; color:#0088cc;"></i>
+            <h3>Chat Telegram 1</h3>
+            <p>Contactez nous sur Telegram</p>
+            
+            <a href="https://t.me/@ChatCryptoinvests" target="_blank" 
+            style="display:inline-block; padding:10px 18px; margin-top:10px; 
+                    background-color:#0088cc; color:white; font-weight:bold; 
+                    border-radius:25px; text-decoration:none;">
+                <i class="fab fa-telegram-plane" style="margin-right:8px;"></i> Rejoindre
+            </a>
+        </div>
+        <!-- Telegram -->
+        <div style="background:#fff; border-radius:12px; padding:20px; text-align:center; 
+                    box-shadow:0 4px 12px rgba(0,0,0,0.1); max-width:250px; margin:auto;">
+            
+            <i class="fab fa-telegram-plane" style="font-size:40px; margin-bottom:10px; color:#0088cc;"></i>
+            <h3>Chat Telegram 2</h3>
+            <p>Contactez nous sur Telegram</p>
+            
+            <a href="https://t.me/invest1162" target="_blank" 
+            style="display:inline-block; padding:10px 18px; margin-top:10px; 
+                    background-color:#0088cc; color:white; font-weight:bold; 
+                    border-radius:25px; text-decoration:none;">
+                <i class="fab fa-telegram-plane" style="margin-right:8px;"></i> Rejoindre
+            </a>
+        </div>
+        <!-- Telegram -->
+        <div style="background:#fff; border-radius:12px; padding:20px; text-align:center; 
+                    box-shadow:0 4px 12px rgba(0,0,0,0.1); max-width:250px; margin:auto;">
+            
+            <i class="fab fa-telegram-plane" style="font-size:40px; margin-bottom:10px; color:#0088cc;"></i>
+            <h3>Chat Telegram 2</h3>
+            <p>Contactez nous sur Telegram</p>
+            
+            <a href="https://t.me/invest1162" target="_blank" 
+            style="display:inline-block; padding:10px 18px; margin-top:10px; 
+                    background-color:#0088cc; color:white; font-weight:bold; 
+                    border-radius:25px; text-decoration:none;">
+                <i class="fab fa-telegram-plane" style="margin-right:8px;"></i> Rejoindre
+            </a>
+        </div>
+
+        <!-- whatsapp -->
+        <div style="background:#fff; border-radius:12px; padding:20px; text-align:center; 
+                    box-shadow:0 4px 12px rgba(0,0,0,0.1); max-width:250px; margin:auto;">
+            
+            <i class="fab fa-whatsapp" style="font-size:40px; margin-bottom:10px; color:#25D366;"></i>
+            <h3>WhatsApp 1</h3>
+            <p>Contactez-nous sur WhatsApp</p>
+            
+            <a href="https://wa.me/6564925096" target="_blank" 
+            style="display:inline-block; padding:10px 18px; margin-top:10px; 
+                    background-color:#25D366; color:white; font-weight:bold; 
+                    border-radius:25px; text-decoration:none;">
+                <i class="fab fa-whatsapp" style="margin-right:8px;"></i> WhatsApp 
+            </a>
+        </div>
+
+        <!-- whatsapp -->
+        <div style="background:#fff; border-radius:12px; padding:20px; text-align:center; 
+                    box-shadow:0 4px 12px rgba(0,0,0,0.1); max-width:250px; margin:auto;">
+            
+            <i class="fab fa-whatsapp" style="font-size:40px; margin-bottom:10px; color:#25D366;"></i>
+            <h3>WhatsApp 2</h3>
+            <p>Contactez-nous sur WhatsApp</p>
+
+            <a href="https://wa.me/237651386884" target="_blank" 
+            style="display:inline-block; padding:10px 18px; margin-top:10px; 
+                    background-color:#25D366; color:white; font-weight:bold; 
+                    border-radius:25px; text-decoration:none;">
+                <i class="fab fa-whatsapp" style="margin-right:8px;"></i> WhatsApp
+            </a>
+        </div>
+
+
     </div>
 
     <div class="call-us">
