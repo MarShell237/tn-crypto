@@ -28,9 +28,8 @@
                 $gradient2 = $colors[$produit->nom][1] ?? '#f0f0f0';
                 $buttonColor = $colors[$produit->nom][2] ?? '#0e1577';
 
-                // Vérification côté serveur pour savoir si le bouton doit être actif
-                $lastGain = $produit->pivot->last_gain_at ?? null;
-                $canClaim = !$lastGain || now()->diffInHours($lastGain) >= 24;
+                $lastGain = $produit->pivot->last_gain_at ? \Carbon\Carbon::parse($produit->pivot->last_gain_at) : null;
+                $canClaim = !$lastGain || now()->diffInSeconds($lastGain) >= 24*3600;
             @endphp
 
             <div class="crypto-card" style="background: linear-gradient(135deg, {{ $gradient }}, {{ $gradient2 }});">
@@ -58,42 +57,34 @@
                     <button 
                         type="submit"
                         class="btn-gain"
-                        style="background: {{ $buttonColor }}; color:white; padding:10px 18px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; opacity: {{ $canClaim ? '1' : '0.6' }};"
+                        style="background: {{ $buttonColor }}; color:white; padding:10px 18px; border:none; border-radius:8px; cursor:pointer; font-weight:bold;"
                         {{ $canClaim ? '' : 'disabled' }}>
-                        {{ $canClaim ? '🎁 Réclamer mon gain' : '⏳ Déjà réclamé' }}
+                        {{ $canClaim ? '🎁 Réclamer mon gain' : '⏳ Déjà réclamé. revenir après 24h' }}
                     </button>
                 </form>
-
             </div>
         @endforeach
     </div>
 </div>
 
 <style>
-/* Container global */
 .produit-container {
     width: auto;
     margin: 0 auto;
     padding: 10px 10px;
     text-align: center;
 }
-
-/* Titre principal */
 .produit-title {
     font-size: 2.5rem;
     font-weight: 800;
     margin-bottom: 50px;
     color: #222;
 }
-
-/* Grid responsive */
 .crypto-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
 }
-
-/* Carte crypto */
 .crypto-card {
     border-radius: 20px;
     padding: 20px 15px;
@@ -105,22 +96,16 @@
     transform: translateY(-10px);
     box-shadow: 0 15px 35px rgba(0,0,0,0.15);
 }
-
-/* Icone */
 .crypto-card .icon {
     font-size: 3.5rem;
     margin-bottom: 20px;
 }
-
-/* Nom crypto */
 .crypto-card h3 {
     font-size: 1.6rem;
     margin-bottom: 20px;
     font-weight: 700;
     color: #111;
 }
-
-/* Paragraphes */
 .crypto-card p {
     margin: 8px 0;
     font-size: 1rem;
@@ -138,8 +123,6 @@
     color: #16a34a;
     font-weight: 700;
 }
-
-/* Bouton gain */
 .btn-gain {
     margin-top: 12px;
     transition: 0.3s;

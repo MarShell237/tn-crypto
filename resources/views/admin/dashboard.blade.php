@@ -48,9 +48,6 @@
     <div class="chart-container">
         <canvas id="usersChart"></canvas>
     </div>
-    <div class="chart-actions">
-        <button onclick="usersChart.resetZoom()" class="btn">Réinitialiser Zoom</button>
-    </div>
 </div>
 
 <style>

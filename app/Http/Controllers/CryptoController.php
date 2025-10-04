@@ -20,12 +20,12 @@ class CryptoController extends Controller
             $user->save();
 
             $user->produits()->attach($produit->id, [
-                'duree'  => $produit->duree,
-                'revenu' => $produit->revenu,
-                'prix'   => $produit->prix,
-                'montant' => 0,
-                'compte_total' => 0,
-                'last_gain_at' => null,
+                'duree'       => $produit->duree,
+                'revenu'      => $produit->revenu,
+                'prix'        => $produit->prix,
+                'montant'     => 0,
+                'compte_total'=> 0,
+                'last_gain_at'=> null,
             ]);
 
             return response()->json([
@@ -61,9 +61,9 @@ class CryptoController extends Controller
         $produit = $user->produits()->where('produit_id', $id)->firstOrFail();
         $pivot   = $produit->pivot;
 
-        // Vérification 24h
+        // Vérification 24 heures
         if ($pivot->last_gain_at && now()->diffInHours($pivot->last_gain_at) < 24) {
-            return back()->with('error', 'Vous devez attendre 24h avant de réclamer vos gains.');
+            return back()->with('error', '⏳ Vous devez attendre 24h avant de réclamer vos gains.');
         }
 
         // Mise à jour du cumul du produit
@@ -89,7 +89,7 @@ class CryptoController extends Controller
     {
         $user = Auth::user();
 
-        // Gains cumulés (info séparée)
+        // Gains cumulés
         $totalGains = $user->produits()
             ->withPivot('montant')
             ->get()
@@ -99,9 +99,9 @@ class CryptoController extends Controller
         $soldeTotal = $user->balance;
 
         return view('dashboard', [
-            'totalGains' => $totalGains,
-            'soldeTotal' => $soldeTotal,
-            'userBalance' => $user->balance
+            'totalGains'   => $totalGains,
+            'soldeTotal'   => $soldeTotal,
+            'userBalance'  => $user->balance
         ]);
     }
 }

@@ -6,11 +6,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
-    <title>{{ config('app.name', 'InvestPro') }}</title>
+
+    <title>{{ config('app.name') }}</title>
 
     <!-- Font Awesome CDN pour emojis/icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- <a href="https://www.flaticon.com/free-icons/litecoin" title="Litecoin icons">Litecoin icons created by riajulislam - Flaticon</a> -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon-bitcoin.ico.png') }}">
 
     <style>
         html, body {
