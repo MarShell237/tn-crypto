@@ -16,10 +16,10 @@
         Voici un bref aperçu de notre plateforme :
     </p>
     <ul class="platform-brief">
-        <li><i class="fas fa-gift"></i> Bonus d'inscription : <b>1000 FCFA</b></li>
+        <li><i class="fas fa-gift"></i> Bonus d'inscription : <b>500 FCFA</b></li>
         <li><i class="fas fa-user-friends"></i> Invitez vos amis et recevez <b>20 % de leur investissement</b></li>
         <li><i class="fas fa-wallet"></i> Un retrait possible <b>chaque jour</b></li>
-        <li><i class="fas fa-globe"></i> CryptoInvest sera lancé au <b>Cameroun, Bénin et Burkina Faso le 31 août 2025</b></li>
+        <li><i class="fas fa-globe"></i> CryptoInvest sera lancé dans tous les pays du monde entier  le 7 octobre 2025</li>
     </ul>
 
     <!-- Bouton Telegram -->
@@ -215,6 +215,11 @@ body { background-color: #f4f6f8; font-family: 'Poppins', Arial, sans-serif; col
         padding: 10px; 
     }
 
+    .modal-btn{ 
+        padding: 10px 15px; 
+        font-size: 0.9rem; 
+        margin: 5px;
+    }
     .welcome-text { font-size: 0.9rem; }
     .platform-brief li { font-size: 0.85rem; padding: 6px 0; }
     .marquee p { font-size: 0.85rem; }
@@ -239,6 +244,11 @@ body { background-color: #f4f6f8; font-family: 'Poppins', Arial, sans-serif; col
     .feature-card button { 
         font-size: 0.8em; 
         padding: 6px 10px; 
+    }
+    .modal-btn{ 
+        padding: 10px 15px; 
+        font-size: 0.9rem; 
+        margin: 5px;
     }
 }
 

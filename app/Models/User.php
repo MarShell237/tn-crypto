@@ -60,7 +60,7 @@ class User extends Authenticatable
                 $user->referral_code = self::generateReferralCode();
             }
             // Ajouter un solde initial
-            $user->balance = 1000; // 1000 FCFA
+            $user->balance = 500; // 500 FCFA
             });
     }
 

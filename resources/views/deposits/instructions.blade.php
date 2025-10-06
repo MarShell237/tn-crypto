@@ -18,7 +18,7 @@
             <p>Envoyez le montant exact au numéro suivant depuis votre compte mobile (ou suivez la procédure de votre opérateur) le composant le <strong>#150*11*692496299#</strong></p>
 
             <ul>
-                <li>Numéro à payer : <strong>+(237) 692496299</strong> (SAMPSON ABANE)</li>
+                <li>Numéro à payer : <strong>+(237)670569271</strong> (Gabriel Biena Batna)</li>
                 <li>Message / Motif : <strong>{{ $deposit->reference }}</strong></li>
             </ul>
 

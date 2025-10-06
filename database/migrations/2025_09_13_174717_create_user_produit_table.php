@@ -24,7 +24,7 @@ return new class extends Migration
         // Colonnes pour gestion des gains
         $table->decimal('montant', 15, 2)->default(0);       // cumul du jour
         $table->decimal('compte_total', 15, 2)->default(0);  // cumul global
-        $table->timestamp('last_gain_at')->nullable();       // dernière fois qu’il a reçu un gain
+        // $table->timestamp('last_gain_at')->nullable();       // dernière fois qu’il a reçu un gain
 
         $table->timestamps();
     });

@@ -50,21 +50,6 @@
                 <i class="fab fa-telegram-plane" style="margin-right:8px;"></i> Rejoindre
             </a>
         </div>
-        <!-- Telegram -->
-        <div style="background:#fff; border-radius:12px; padding:20px; text-align:center; 
-                    box-shadow:0 4px 12px rgba(0,0,0,0.1); max-width:250px; margin:auto;">
-            
-            <i class="fab fa-telegram-plane" style="font-size:40px; margin-bottom:10px; color:#0088cc;"></i>
-            <h3>Chat Telegram 2</h3>
-            <p>Contactez nous sur Telegram</p>
-            
-            <a href="https://t.me/invest1162" target="_blank" 
-            style="display:inline-block; padding:10px 18px; margin-top:10px; 
-                    background-color:#0088cc; color:white; font-weight:bold; 
-                    border-radius:25px; text-decoration:none;">
-                <i class="fab fa-telegram-plane" style="margin-right:8px;"></i> Rejoindre
-            </a>
-        </div>
 
         <!-- whatsapp -->
         <div style="background:#fff; border-radius:12px; padding:20px; text-align:center; 

@@ -52,7 +52,7 @@ class RegisteredUserController extends Controller
                 $user->save();
 
                 // Bonus automatique pour le parrain
-                $referrer->balance += 500; // exemple : 500 FCFA
+                $referrer->balance += 250; 
                 $referrer->save();
             }
         }

@@ -3,116 +3,117 @@
 @section('content')
 
 <style>
-body {
-    background-color: #121212;
-    font-family: Arial, sans-serif;
-    color: #e0e0e0;
-}
-
-.auth-container {
-    max-width: 400px;
-    margin: 60px auto;
-    padding: 30px;
-    background-color: #1f1f2e;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-}
-
-.auth-container h1 {
+/* --- TITRE --- */
+h1 {
     text-align: center;
-    color: #ff9800;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #3a3a3a;
     margin-bottom: 25px;
-    font-size: 2rem;
 }
 
-.auth-container input {
+/* --- CHAMPS INPUT --- */
+input {
     width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border-radius: 6px;
-    border: 1px solid #333;
-    background-color: #2b2b3c;
-    color: #e0e0e0;
-    font-size: 16px;
-    transition: border 0.3s, background 0.3s;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    background: rgba(255,255,255,0.85);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
-.auth-container input:focus {
+input:focus {
     border-color: #3a8dff;
-    background-color: #333;
+    background-color: rgba(255,255,255,0.95);
     outline: none;
+    box-shadow: 0 0 6px rgba(58,141,255,0.4);
 }
 
-.auth-container button {
+/* --- BOUTON --- */
+button {
     width: 100%;
     padding: 12px;
-    background-color: #3a8dff;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+    background: linear-gradient(135deg, #3a8dff, #1e40af);
+    color: white;
     font-size: 16px;
-    font-weight: bold;
-    transition: background 0.3s, transform 0.2s;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.auth-container button:hover {
-    background-color: #2865c2;
-    transform: scale(1.02);
+button:hover {
+    background: linear-gradient(135deg, #1e40af, #1b326e);
+    transform: translateY(-1px);
 }
 
-.auth-container .links {
+/* --- LIENS --- */
+.links {
     text-align: center;
     margin-top: 15px;
     font-size: 14px;
 }
 
-.auth-container .links a {
+.links a {
     color: #3a8dff;
     text-decoration: none;
+    font-weight: 500;
     transition: color 0.3s;
 }
 
-.auth-container .links a:hover {
+.links a:hover {
     color: #ff9800;
     text-decoration: underline;
 }
 
-/* Optionnel : erreurs de validation */
-.auth-container .error {
-    background-color: #ff4d4f;
+/* --- ERREURS --- */
+.error {
+    background-color: #dc2626;
     color: #fff;
-    padding: 8px 12px;
+    padding: 10px;
     border-radius: 6px;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     font-size: 14px;
     text-align: center;
 }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.6rem;
+    }
+    input, button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
 </style>
 
-<div class="auth-container">
-    <h1>Connexion</h1>
+<h1>Connexion</h1>
 
-    @if ($errors->any())
-        <div class="error">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-        <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
-        <input type="password" name="password" placeholder="Mot de passe" required>
-        <button type="submit">Se connecter</button>
-    </form>
-
-    <div class="links">
-        <a href="{{ route('register') }}">Pas de compte ? Inscrivez-vous</a>
+@if ($errors->any())
+    <div class="error">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
     </div>
+@endif
+
+<form method="POST" action="{{ route('login') }}">
+    @csrf
+    <input type="email" name="email" placeholder="Adresse e-mail" value="{{ old('email') }}" required>
+    <input type="password" name="password" placeholder="Mot de passe" required>
+    <button type="submit">Se connecter</button>
+</form>
+
+<div class="links">
+    <a href="{{ route('register') }}">Pas de compte ? Inscrivez-vous</a>
 </div>
 
 @endsection

@@ -78,7 +78,7 @@
         .footer-link i {
             font-size: 24px; /* taille de l’emoji/icône */
             margin-bottom: 5px;
-            color: #0e1577;
+            color:  #F7931A;
         }
 
         .footer-link a {
