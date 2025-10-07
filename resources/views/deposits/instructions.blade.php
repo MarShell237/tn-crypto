@@ -15,10 +15,13 @@
 
         <div class="instructions">
             <h4><i class="fas fa-info-circle"></i> Mode: {{ $deposit->method }}</h4>
-            <p>Envoyez le montant exact au numéro suivant depuis votre compte mobile (ou suivez la procédure de votre opérateur) le composant le <strong>#150*11*692496299#</strong></p>
+            <p>Envoyez le montant exact au numéro suivant depuis votre compte mobile (ou suivez la procédure de votre opérateur) </p>
+    
 
             <ul>
-                <li>Numéro à payer : <strong>+(237)670569271</strong> (Gabriel Biena Batna)</li>
+                <li>Numéro à payer : <strong>+(237)697948507</strong> (MARIE HORTENSE TCHAKOUNU)</li>
+                <li>ou bien <strong>+(237)670569271</strong> (Gabriel Biena Batna) pour <strong>MOMO</strong></li>
+
                 <li>Message / Motif : <strong>{{ $deposit->reference }}</strong></li>
             </ul>
 

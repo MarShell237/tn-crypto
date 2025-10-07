@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->decimal('amount', 15, 2);
-            $table->enum('method', ['MOMO','OM','CRYPTO','MOOV','FLOOZ','WAVE','TOGOCASH']);
+            $table->enum('method', ['OM','MOMO','CRYPTO','autres']);
             $table->string('status')->default('pending'); // pending, processing, completed, failed
             $table->string('reference')->nullable()->unique();
             $table->string('phone')->nullable(); // pour MOMO / OM
