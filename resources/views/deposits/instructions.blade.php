@@ -32,7 +32,7 @@
         <div class="important-info">
             <h4><i class="fas fa-exclamation-triangle"></i> Informations Importantes</h4>
             <ul>
-                <li>1️⃣ Le <strong>minimum de retrait est 1 000 FCFA</strong> avec <strong>10% de frais</strong>.</li>
+                <li>1️⃣ Le <strong>minimum de retrait est 2 000 FCFA</strong> avec <strong>10% de frais</strong>.</li>
                 <li>2️⃣ Les retraits sont traités du lundi au vendredi, de 9h à 17h, et prennent <strong>moins de 12 heures</strong>.</li>
                 <li>3️⃣ Assurez-vous que le <strong>nom du titulaire</strong> et l'<strong>identifiant de retrait</strong> sont corrects pour éviter les retards.</li>
                 <li>4️⃣ Vous devez avoir un <strong>plan VIP actif</strong> pour pouvoir effectuer un retrait.</li>

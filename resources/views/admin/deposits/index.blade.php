@@ -29,6 +29,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Utilisateur</th>
+                    <th>Téléphone</th>
                     <th>Montant (FCFA)</th>
                     <th>Méthode</th>
                     <th>Référence</th>
@@ -45,6 +46,7 @@
                             <strong>{{ $deposit->user->name }}</strong>
                             <br><small>{{ $deposit->user->email }}</small>
                         </td>
+                        <td>{{ $deposit->user->phone ?? '—' }}</td>
                         <td><strong>{{ number_format($deposit->amount,0,',',' ') }}</strong></td>
                         <td>{{ $deposit->method }}</td>
                         <td>{{ $deposit->reference }}</td>
@@ -71,10 +73,11 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" class="no-data">Aucun dépôt trouvé.</td>
+                        <td colspan="9" class="no-data">Aucun dépôt trouvé.</td>
                     </tr>
                 @endforelse
             </tbody>
+
         </table>
     </div>
 </div>

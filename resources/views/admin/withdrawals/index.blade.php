@@ -30,6 +30,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Utilisateur</th>
+                    <th>Contact</th>
                     <th>Solde actuel</th>
                     <th>Montant demandé</th>
                     <th>Méthode</th>
@@ -44,12 +45,15 @@
                     <tr>
                         <td>{{ $w->id }}</td>
                         <td>
-                            <strong>{{ $w->user->name }}</strong>
-                            <br><small>{{ $w->user->email }}</small>
+                            <strong>{{ $w->user->name }}</strong><br>
+                            <small>{{ $w->user->email }}</small>
+                        </td>
+                        <td>
+                            <i class="fas fa-phone"></i> {{ $w->user->phone ?? 'N/A' }}
                         </td>
                         <td>{{ number_format($w->user->balance,0,',',' ') }} FCFA</td>
                         <td><strong>{{ number_format($w->amount,0,',',' ') }} FCFA</strong></td>
-                        <td>{{ $w->method }}</td>
+                        <td>{{ ucfirst($w->method) }}</td>
                         <td>{{ $w->reference }}</td>
                         <td>
                             <span class="status-badge {{ $w->status }}">
@@ -83,7 +87,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="9" class="empty-table">Aucun retrait trouvé.</td></tr>
+                    <tr><td colspan="10" class="empty-table">Aucun retrait trouvé.</td></tr>
                 @endforelse
             </tbody>
         </table>
@@ -132,7 +136,7 @@
 .withdrawals-table { 
     width: 100%; 
     border-collapse: collapse; 
-    min-width: 950px; 
+    min-width: 1100px; 
 }
 .withdrawals-table th, .withdrawals-table td { 
     padding: 14px 12px; 
@@ -203,7 +207,7 @@
     .filter-form label { display:block; margin-bottom:8px; }
     .filter-form select { width: 100%; }
 
-    .withdrawals-table { min-width: 720px; }
+    .withdrawals-table { min-width: 900px; }
     .withdrawals-table th, .withdrawals-table td { font-size: 12px; padding: 8px 6px; }
 
     .status-badge {
@@ -216,7 +220,7 @@
     .admin-container { padding: 15px; }
     .admin-container h2 { font-size: 20px; }
 
-    .withdrawals-table { min-width: 600px; }
+    .withdrawals-table { min-width: 800px; }
     .withdrawals-table th, .withdrawals-table td { font-size: 11px; padding: 6px 4px; }
 
     .status-badge {
