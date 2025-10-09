@@ -47,7 +47,7 @@
                         <td>{{ $w->id }}</td>
                         <td>{{ $w->user->name }}</td>
                         <td>{{ $w->user->email }}</td>
-                        <td><i class="fas fa-phone"></i> {{ $w->user->phone ?? 'N/A' }}</td>
+                        <td><i class="fas fa-phone"></i> {{ $w->phone ?? 'N/A' }}</td>
                         <td>{{ number_format($w->user->balance,0,',',' ') }} FCFA</td>
                         <td><strong>{{ number_format($w->amount,0,',',' ') }} FCFA</strong></td>
                         <td>{{ ucfirst($w->method) }}</td>
@@ -91,6 +91,7 @@
     </div>
 </div>
 
+{{-- Styles conservés --}}
 <style>
 /* --- Container --- */
 .admin-container { max-width: 1250px; margin: 40px auto; padding: 25px; font-family: 'Poppins', sans-serif; }
