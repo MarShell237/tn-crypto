@@ -27,7 +27,7 @@
         </div>
         <div class="card">
             <h3>Solde total</h3>
-            <p>{{ number_format($totalBalance, 2) }} €</p>
+            <p>{{ number_format($totalBalance, 2) }} F CFA</p>
         </div>
         <div class="card">
             <h3>Parrainages actifs</h3>
