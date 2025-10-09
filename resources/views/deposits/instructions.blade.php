@@ -19,8 +19,8 @@
     
 
             <ul>
-                <li>Numéro à payer : <strong>+(237)697948507</strong> (MARIE HORTENSE TCHAKOUNU)</li>
-                <li>ou bien <strong>+(237)670569271</strong> (Gabriel Biena Batna) pour <strong>MOMO</strong></li>
+                <li>Numéro à payer : <strong>+(237) 688821971</strong> (SIMON TCHEUDJIO)</li>
+                <li>ou bien <strong>+(237) 670569271</strong> (Gabriel Biena Batna) pour <strong>MOMO</strong></li>
 
                 <li>Message / Motif : <strong>{{ $deposit->reference }}</strong></li>
             </ul>
