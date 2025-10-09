@@ -29,7 +29,8 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Utilisateur</th>
+                    <th>Nom</th>
+                    <th>Email</th>
                     <th>Contact</th>
                     <th>Solde actuel</th>
                     <th>Montant demandé</th>
@@ -44,13 +45,9 @@
                 @forelse($withdrawals as $w)
                     <tr>
                         <td>{{ $w->id }}</td>
-                        <td>
-                            <strong>{{ $w->user->name }}</strong><br>
-                            <small>{{ $w->user->email }}</small>
-                        </td>
-                        <td>
-                            <i class="fas fa-phone"></i> {{ $w->user->phone ?? 'N/A' }}
-                        </td>
+                        <td>{{ $w->user->name }}</td>
+                        <td>{{ $w->user->email }}</td>
+                        <td><i class="fas fa-phone"></i> {{ $w->phone ?? 'N/A' }}</td>
                         <td>{{ number_format($w->user->balance,0,',',' ') }} FCFA</td>
                         <td><strong>{{ number_format($w->amount,0,',',' ') }} FCFA</strong></td>
                         <td>{{ ucfirst($w->method) }}</td>
@@ -87,39 +84,23 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="10" class="empty-table">Aucun retrait trouvé.</td></tr>
+                    <tr><td colspan="11" class="empty-table">Aucun retrait trouvé.</td></tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 </div>
 
+{{-- Styles conservés --}}
 <style>
 /* --- Container --- */
-.admin-container {
-    max-width: 1250px; 
-    margin: 40px auto; 
-    padding: 25px; 
-    font-family: 'Poppins', sans-serif; 
-}
-.admin-container h2 { 
-    text-align: center; 
-    color: #0e1577; 
-    margin-bottom: 30px; 
-    font-weight: 600; 
-    font-size: 24px;
-}
+.admin-container { max-width: 1250px; margin: 40px auto; padding: 25px; font-family: 'Poppins', sans-serif; }
+.admin-container h2 { text-align: center; color: #0e1577; margin-bottom: 30px; font-weight: 600; font-size: 24px; }
 
 /* --- Alerts --- */
-.alert { 
-    padding: 12px 15px; 
-    border-radius: 8px; 
-    margin-bottom: 25px; 
-    font-size: 14px; 
-    font-weight: 500;
-}
-.alert.success { background:#e6f9ed; color:#0a7f3e; border:1px solid #0a7f3e;}
-.alert.error { background:#ffe6e6; color:#a00; border:1px solid #a00;}
+.alert { padding: 12px 15px; border-radius: 8px; margin-bottom: 25px; font-size: 14px; font-weight: 500; }
+.alert.success { background:#e6f9ed; color:#0a7f3e; border:1px solid #0a7f3e; }
+.alert.error { background:#ffe6e6; color:#a00; border:1px solid #a00; }
 
 /* --- Filtres --- */
 .filter-form { margin-bottom: 20px; text-align: right; }
@@ -127,46 +108,15 @@
 .filter-form select { padding: 8px 14px; border-radius: 6px; border: 1px solid #ccc; min-width: 160px; }
 
 /* --- Table --- */
-.table-container { 
-    overflow-x: auto; 
-    border-radius: 10px; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
-    background: #fff;
-}
-.withdrawals-table { 
-    width: 100%; 
-    border-collapse: collapse; 
-    min-width: 1100px; 
-}
-.withdrawals-table th, .withdrawals-table td { 
-    padding: 14px 12px; 
-    border-bottom: 1px solid #f0f0f0; 
-    text-align: left; 
-    vertical-align: middle;
-}
-.withdrawals-table th { 
-    background: #f8f9fc; 
-    font-weight: 600; 
-    color: #333; 
-    font-size: 14px;
-}
-.withdrawals-table tbody tr:nth-child(even) {
-    background: #fafafa;
-}
-.withdrawals-table td {
-    font-size: 13px;
-    color: #444;
-}
+.table-container { overflow-x: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); background: #fff; }
+.withdrawals-table { width: 100%; border-collapse: collapse; min-width: 1150px; }
+.withdrawals-table th, .withdrawals-table td { padding: 14px 12px; border-bottom: 1px solid #f0f0f0; text-align: left; vertical-align: middle; }
+.withdrawals-table th { background: #f8f9fc; font-weight: 600; color: #333; font-size: 14px; }
+.withdrawals-table tbody tr:nth-child(even) { background: #fafafa; }
+.withdrawals-table td { font-size: 13px; color: #444; }
 
 /* --- Badges --- */
-.status-badge { 
-    padding: 6px 12px; 
-    border-radius: 20px; 
-    font-size: 13px; 
-    font-weight: 600; 
-    color: #fff; 
-    display: inline-block; 
-}
+.status-badge { padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; color: #fff; display: inline-block; }
 .status-badge.pending { background: #f59e0b; }
 .status-badge.validated { background: #16a34a; }
 .status-badge.completed { background: #0e1577; }
@@ -174,18 +124,7 @@
 
 /* --- Actions --- */
 .actions-column form { margin-bottom: 6px; }
-.btn { 
-    display: block; 
-    width: 100%; 
-    padding: 8px 12px; 
-    border: none; 
-    border-radius: 8px; 
-    font-size: 13px; 
-    cursor: pointer; 
-    transition: all .3s; 
-    color: #fff; 
-    font-weight: 500;
-}
+.btn { display: block; width: 100%; padding: 8px 12px; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; transition: all .3s; color: #fff; font-weight: 500; }
 .btn-validate { background: linear-gradient(135deg,#0e1577,#2865c2); }
 .btn-validate:hover { background: linear-gradient(135deg,#2865c2,#0e1577); transform: scale(1.04); }
 .btn-reject { background: linear-gradient(135deg,#b91c1c,#dc2626); }
@@ -197,36 +136,8 @@
 .empty-table { text-align: center; font-style: italic; color: #555; padding: 20px 0; }
 
 /* --- Responsive --- */
-@media (max-width:1024px){
-    .withdrawals-table th, .withdrawals-table td { padding: 10px 8px; font-size: 13px; }
-    .btn { font-size: 12px; padding: 6px 10px; }
-}
-
-@media (max-width:768px){
-    .filter-form { text-align: center; }
-    .filter-form label { display:block; margin-bottom:8px; }
-    .filter-form select { width: 100%; }
-
-    .withdrawals-table { min-width: 900px; }
-    .withdrawals-table th, .withdrawals-table td { font-size: 12px; padding: 8px 6px; }
-
-    .status-badge {
-        font-size: 11px;
-        padding: 4px 8px;
-    }
-}
-
-@media (max-width:480px){
-    .admin-container { padding: 15px; }
-    .admin-container h2 { font-size: 20px; }
-
-    .withdrawals-table { min-width: 800px; }
-    .withdrawals-table th, .withdrawals-table td { font-size: 11px; padding: 6px 4px; }
-
-    .status-badge {
-        font-size: 10px;
-        padding: 3px 6px;
-    }
-}
+@media (max-width:1024px){ .withdrawals-table th, .withdrawals-table td { padding: 10px 8px; font-size: 13px; } .btn { font-size: 12px; padding: 6px 10px; } }
+@media (max-width:768px){ .filter-form { text-align: center; } .filter-form label { display:block; margin-bottom:8px; } .filter-form select { width: 100%; } .withdrawals-table { min-width: 900px; } .withdrawals-table th, .withdrawals-table td { font-size: 12px; padding: 8px 6px; } .status-badge { font-size: 11px; padding: 4px 8px; } }
+@media (max-width:480px){ .admin-container { padding: 15px; } .admin-container h2 { font-size: 20px; } .withdrawals-table { min-width: 800px; } .withdrawals-table th, .withdrawals-table td { font-size: 11px; padding: 6px 4px; } .status-badge { font-size: 10px; padding: 3px 6px; } }
 </style>
 @endsection
